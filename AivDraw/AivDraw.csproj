@@ -4,8 +4,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>AivDraw</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Aiv.Draw</RootNamespace>
     <AssemblyName>AivDraw</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
