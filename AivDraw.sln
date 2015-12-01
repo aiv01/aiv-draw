@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivDraw", "AivDraw\AivDraw.csproj", "{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}.Debug|x86.ActiveCfg = Debug|x86
+		{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}.Debug|x86.Build.0 = Debug|x86
+		{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}.Release|x86.ActiveCfg = Release|x86
+		{ED3AC533-C176-474B-B75E-1CBB8E6D65C7}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal
