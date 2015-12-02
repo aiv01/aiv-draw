@@ -79,6 +79,14 @@ namespace Aiv.Draw
 		public bool opened = true;
 		private Dictionary<KeyCode, bool> keyboardTable;
 
+
+		private bool _mouseLeft;
+		private bool _mouseRight;
+		private bool _mouseMiddle;
+
+		private int deltaW;
+		private int deltaH;
+
 		private class WindowDraw : Form {
 			public WindowDraw() {
 				StartPosition = FormStartPosition.CenterScreen;
@@ -102,13 +110,14 @@ namespace Aiv.Draw
 			this.form.Text = title;
 			this.form.Size = new Size (width, height);
 			Size clientSize = this.form.ClientSize;
-			int deltaW = width - clientSize.Width;
-			int deltaH = height - clientSize.Height;
-			this.form.Size = new Size (width + deltaW, height + deltaH);
+			this.deltaW = width - clientSize.Width;
+			this.deltaH = height - clientSize.Height;
+			this.form.Size = new Size (width + this.deltaW, height + this.deltaH);
 
 			this.form.FormClosed += new FormClosedEventHandler (this.Close);
 			this.form.KeyDown += new KeyEventHandler (this.KeyDown);
 			this.form.KeyUp += new KeyEventHandler (this.KeyUp);
+
 
 			this.width = width;
 			this.height = height;
@@ -139,11 +148,64 @@ namespace Aiv.Draw
 			this.pbox.Size = new Size (this.width, this.height);
 			this.form.Controls.Add (this.pbox);
 
+			this.pbox.MouseUp += new MouseEventHandler (this.MouseUp);
+			this.pbox.MouseDown += new MouseEventHandler (this.MouseDown);
+
 			watch = new Stopwatch ();
 
 			this.keyboardTable = new Dictionary<KeyCode, bool>();
 
 			this.form.Show ();
+		}
+
+		public int mouseX {
+			get {
+				return Cursor.Position.X - this.form.Location.X - this.deltaW;
+			}
+		}
+
+		public int mouseY {
+			get {
+				return Cursor.Position.Y - this.form.Location.Y - this.deltaH;
+			}
+		}
+
+		public bool mouseLeft {
+			get {
+				return this._mouseLeft;
+			}
+		}
+
+		public bool mouseRight {
+			get {
+				return this._mouseRight;
+			}
+		}
+
+		public bool mouseMiddle {
+			get {
+				return this._mouseMiddle;
+			}
+		}
+
+		private void MouseDown (object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+				this._mouseLeft = true;
+			if (e.Button == MouseButtons.Right)
+				this._mouseRight = true;
+			if (e.Button == MouseButtons.Middle)
+				this._mouseMiddle = true;
+		}
+
+		private void MouseUp (object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+				this._mouseLeft = false;
+			if (e.Button == MouseButtons.Right)
+				this._mouseRight = false;
+			if (e.Button == MouseButtons.Middle)
+				this._mouseMiddle = false;
 		}
 
 
