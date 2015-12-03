@@ -156,17 +156,18 @@ namespace Aiv.Draw
 			this.keyboardTable = new Dictionary<KeyCode, bool>();
 
 			this.form.Show ();
+			this.form.Focus ();
 		}
 
 		public int mouseX {
 			get {
-				return Cursor.Position.X - this.form.Location.X - this.deltaW;
+				return this.form.PointToClient (Cursor.Position).X;
 			}
 		}
 
 		public int mouseY {
 			get {
-				return Cursor.Position.Y - this.form.Location.Y - this.deltaH;
+				return this.form.PointToClient (Cursor.Position).Y;
 			}
 		}
 
