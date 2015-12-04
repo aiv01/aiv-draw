@@ -67,6 +67,17 @@ namespace Aiv.Draw
 		public int width;
 		public int height;
 
+		public bool CursorVisible
+		{
+			set
+			{
+				if (value)
+					Cursor.Show();
+				else
+					Cursor.Hide();
+			}
+		}
+
 		private PixelFormat pixelFormat;
 
 		private Stopwatch watch;
@@ -120,7 +131,6 @@ namespace Aiv.Draw
 			this.form = new WindowDraw();
 			this.form.Text = title;
 			this.form.MinimizeBox = true;
-			Cursor.Hide();
 			this.form.StartPosition = FormStartPosition.CenterScreen;
 			this.form.Size = new Size(width, height);
 			Size clientSize = this.form.ClientSize;
