@@ -15,42 +15,43 @@ namespace Aiv.Draw
 		RGBA,
 	}
 
-	public enum KeyCode {
-		A=Keys.A,
-		B=Keys.B,
-		C=Keys.C,
-		D=Keys.D,
-		E=Keys.E,
-		F=Keys.F,
-		G=Keys.G,
-		H=Keys.H,
-		I=Keys.I,
-		J=Keys.J,
-		K=Keys.K,
-		L=Keys.L,
-		M=Keys.M,
-		N=Keys.N,
-		O=Keys.O,
-		P=Keys.P,
-		Q=Keys.Q,
-		R=Keys.R,
-		S=Keys.S,
-		T=Keys.T,
-		U=Keys.U,
-		V=Keys.V,
-		W=Keys.W,
-		X=Keys.X,
-		Y=Keys.Y,
-		Z=Keys.Z,
+	public enum KeyCode
+	{
+		A = Keys.A,
+		B = Keys.B,
+		C = Keys.C,
+		D = Keys.D,
+		E = Keys.E,
+		F = Keys.F,
+		G = Keys.G,
+		H = Keys.H,
+		I = Keys.I,
+		J = Keys.J,
+		K = Keys.K,
+		L = Keys.L,
+		M = Keys.M,
+		N = Keys.N,
+		O = Keys.O,
+		P = Keys.P,
+		Q = Keys.Q,
+		R = Keys.R,
+		S = Keys.S,
+		T = Keys.T,
+		U = Keys.U,
+		V = Keys.V,
+		W = Keys.W,
+		X = Keys.X,
+		Y = Keys.Y,
+		Z = Keys.Z,
 
-		Space=Keys.Space,
-		Return=Keys.Return,
-		Esc=Keys.Escape,
+		Space = Keys.Space,
+		Return = Keys.Return,
+		Esc = Keys.Escape,
 
-		Up=Keys.Up,
-		Down=Keys.Down,
-		Left=Keys.Left,
-		Right=Keys.Right,
+		Up = Keys.Up,
+		Down = Keys.Down,
+		Left = Keys.Left,
+		Right = Keys.Right,
 	}
 
 	public class Window
@@ -70,11 +71,7 @@ namespace Aiv.Draw
 		private Stopwatch watch;
 
 		private float _deltaTime;
-		public float deltaTime {
-			get {
-				return _deltaTime;
-			}
-		}
+		public float deltaTime => _deltaTime;
 
 		public bool opened = true;
 		private Dictionary<KeyCode, bool> keyboardTable;
@@ -87,36 +84,43 @@ namespace Aiv.Draw
 		private int deltaW;
 		private int deltaH;
 
-		private class WindowDraw : Form {
-			public WindowDraw() {
+		private class WindowDraw : Form
+		{
+			public WindowDraw()
+			{
 				StartPosition = FormStartPosition.CenterScreen;
 				FormBorderStyle = FormBorderStyle.FixedSingle;
 				MaximizeBox = false;
 				MinimizeBox = false;
 
-				this.SetStyle (ControlStyles.AllPaintingInWmPaint, true);
-				this.SetStyle (ControlStyles.OptimizedDoubleBuffer, true);
-				this.SetStyle (ControlStyles.UserPaint, false);
-				this.SetStyle (ControlStyles.FixedWidth, true);
-				this.SetStyle (ControlStyles.FixedHeight, true);
+				this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+				this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+				this.SetStyle(ControlStyles.UserPaint, false);
+				this.SetStyle(ControlStyles.FixedWidth, true);
+				this.SetStyle(ControlStyles.FixedHeight, true);
 
 			}
 		}
 
-		public Window (int width, int height, string title, PixelFormat format)
+		public void SetIcon(string path)
+		{
+			this.form.Icon = new Icon(path);
+		}
+
+		public Window(int width, int height, string title, PixelFormat format)
 		{
 
-			this.form = new WindowDraw ();
+			this.form = new WindowDraw();
 			this.form.Text = title;
-			this.form.Size = new Size (width, height);
+			this.form.Size = new Size(width, height);
 			Size clientSize = this.form.ClientSize;
 			this.deltaW = width - clientSize.Width;
 			this.deltaH = height - clientSize.Height;
-			this.form.Size = new Size (width + this.deltaW, height + this.deltaH);
+			this.form.Size = new Size(width + this.deltaW, height + this.deltaH);
 
-			this.form.FormClosed += new FormClosedEventHandler (this.Close);
-			this.form.KeyDown += new KeyEventHandler (this.KeyDown);
-			this.form.KeyUp += new KeyEventHandler (this.KeyUp);
+			this.form.FormClosed += new FormClosedEventHandler(this.Close);
+			this.form.KeyDown += new KeyEventHandler(this.KeyDown);
+			this.form.KeyUp += new KeyEventHandler(this.KeyUp);
 
 
 			this.width = width;
@@ -124,72 +128,83 @@ namespace Aiv.Draw
 
 			this.pixelFormat = format;
 
-			this.rect = new Rectangle (0, 0, width, height);
+			this.rect = new Rectangle(0, 0, width, height);
 
-			switch (format) {
-			case PixelFormat.BW:
-				this.bitmap = new byte[width * height / 8];
-				break;
-			case PixelFormat.Grayscale:
-				this.bitmap = new byte[width * height];
-				break;
-			case PixelFormat.RGB:
-				this.bitmap = new byte[width * height * 3];
-				break;
-			case PixelFormat.RGBA:
-				this.bitmap = new byte[width * height * 4];
-				break;
-			default:
-				throw new Exception ("Unsupported PixelFormat");
+			switch (format)
+			{
+				case PixelFormat.BW:
+					this.bitmap = new byte[width * height / 8];
+					break;
+				case PixelFormat.Grayscale:
+					this.bitmap = new byte[width * height];
+					break;
+				case PixelFormat.RGB:
+					this.bitmap = new byte[width * height * 3];
+					break;
+				case PixelFormat.RGBA:
+					this.bitmap = new byte[width * height * 4];
+					break;
+				default:
+					throw new Exception("Unsupported PixelFormat");
 			}
 
-			this.workingBitmap = new Bitmap (width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			this.pbox = new PictureBox ();
-			this.pbox.Size = new Size (this.width, this.height);
-			this.form.Controls.Add (this.pbox);
+			this.workingBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+			this.pbox = new PictureBox();
+			this.pbox.Size = new Size(this.width, this.height);
+			this.form.Controls.Add(this.pbox);
 
-			this.pbox.MouseUp += new MouseEventHandler (this.MouseUp);
-			this.pbox.MouseDown += new MouseEventHandler (this.MouseDown);
+			this.pbox.MouseUp += new MouseEventHandler(this.MouseUp);
+			this.pbox.MouseDown += new MouseEventHandler(this.MouseDown);
 
-			watch = new Stopwatch ();
+			watch = new Stopwatch();
 
 			this.keyboardTable = new Dictionary<KeyCode, bool>();
 
-			this.form.Show ();
-			this.form.Focus ();
+			this.form.Show();
+			this.form.Focus();
 		}
 
-		public int mouseX {
-			get {
-				return this.form.PointToClient (Cursor.Position).X;
+		public int mouseX
+		{
+			get
+			{
+				return this.form.PointToClient(Cursor.Position).X;
 			}
 		}
 
-		public int mouseY {
-			get {
-				return this.form.PointToClient (Cursor.Position).Y;
+		public int mouseY
+		{
+			get
+			{
+				return this.form.PointToClient(Cursor.Position).Y;
 			}
 		}
 
-		public bool mouseLeft {
-			get {
+		public bool mouseLeft
+		{
+			get
+			{
 				return this._mouseLeft;
 			}
 		}
 
-		public bool mouseRight {
-			get {
+		public bool mouseRight
+		{
+			get
+			{
 				return this._mouseRight;
 			}
 		}
 
-		public bool mouseMiddle {
-			get {
+		public bool mouseMiddle
+		{
+			get
+			{
 				return this._mouseMiddle;
 			}
 		}
 
-		private void MouseDown (object sender, MouseEventArgs e)
+		private void MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 				this._mouseLeft = true;
@@ -199,7 +214,7 @@ namespace Aiv.Draw
 				this._mouseMiddle = true;
 		}
 
-		private void MouseUp (object sender, MouseEventArgs e)
+		private void MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 				this._mouseLeft = false;
@@ -210,125 +225,134 @@ namespace Aiv.Draw
 		}
 
 
-		private void Close(object sender, FormClosedEventArgs e) {
+		private void Close(object sender, FormClosedEventArgs e)
+		{
 			this.opened = false;
 		}
 
-		private void KeyDown (object sender, KeyEventArgs e)
+		private void KeyDown(object sender, KeyEventArgs e)
 		{
-			this.keyboardTable [(KeyCode)e.KeyCode] = true;
+			this.keyboardTable[(KeyCode)e.KeyCode] = true;
 		}
 
-		private void KeyUp (object sender, KeyEventArgs e)
+		private void KeyUp(object sender, KeyEventArgs e)
 		{
-			this.keyboardTable [(KeyCode)e.KeyCode] = false;
+			this.keyboardTable[(KeyCode)e.KeyCode] = false;
 		}
 
-		unsafe private void BlitRGB ()
+		private unsafe void BlitRGB()
 		{
-			
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits (this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++) {
-				for (int x = 0; x < this.width; x++) {
+			for (int y = 0; y < this.height; y++)
+			{
+				for (int x = 0; x < this.width; x++)
+				{
 					int spos = (y * this.width * 3) + (x * 3);
 					int dpos = (y * this.width * 4) + (x * 4);
 					//B
-					data [dpos] = this.bitmap [spos + 2];
+					data[dpos] = this.bitmap[spos + 2];
 					//G
-					data [dpos + 1] = this.bitmap [spos + 1];
+					data[dpos + 1] = this.bitmap[spos + 1];
 					//R
-					data [dpos + 2] = this.bitmap [spos];
+					data[dpos + 2] = this.bitmap[spos];
 					//A
-					data [dpos + 3] = 0xff;
+					data[dpos + 3] = 0xff;
 				}
 			}
-			this.workingBitmap.UnlockBits (bdata);
+			this.workingBitmap.UnlockBits(bdata);
 
 		}
 
-		unsafe private void BlitRGBA ()
+		private unsafe void BlitRGBA()
 		{
-			
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits (this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++) {
-				for (int x = 0; x < this.width; x++) {
+			for (int y = 0; y < this.height; y++)
+			{
+				for (int x = 0; x < this.width; x++)
+				{
 					int spos = (y * this.width * 4) + (x * 4);
 					int dpos = (y * this.width * 4) + (x * 4);
 					//B
-					data [dpos] = this.bitmap [spos + 2];
+					data[dpos] = this.bitmap[spos + 2];
 					//G
-					data [dpos + 1] = this.bitmap [spos + 1];
+					data[dpos + 1] = this.bitmap[spos + 1];
 					//R
-					data [dpos + 2] = this.bitmap [spos];
+					data[dpos + 2] = this.bitmap[spos];
 					//A
-					data [dpos + 3] = this.bitmap [spos + 3];
+					data[dpos + 3] = this.bitmap[spos + 3];
 				}
 			}
-			this.workingBitmap.UnlockBits (bdata);
+			this.workingBitmap.UnlockBits(bdata);
 
 		}
 
-		unsafe private void BlitGrayscale ()
+		private unsafe void BlitGrayscale()
 		{
-			
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits (this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++) {
-				for (int x = 0; x < this.width; x++) {
+			for (int y = 0; y < this.height; y++)
+			{
+				for (int x = 0; x < this.width; x++)
+				{
 					int spos = (y * this.width) + x;
 					int dpos = (y * this.width * 4) + (x * 4);
 					//B
-					data [dpos] = this.bitmap [spos];
+					data[dpos] = this.bitmap[spos];
 					//G
-					data [dpos + 1] = this.bitmap [spos];
+					data[dpos + 1] = this.bitmap[spos];
 					//R
-					data [dpos + 2] = this.bitmap [spos];
+					data[dpos + 2] = this.bitmap[spos];
 					//A
-					data [dpos + 3] = 0xff;
+					data[dpos + 3] = 0xff;
 				}
 			}
-			this.workingBitmap.UnlockBits (bdata);
+			this.workingBitmap.UnlockBits(bdata);
 
 		}
 
-		public bool GetKey(KeyCode key) {
-			if (!this.keyboardTable.ContainsKey (key))
+		public bool GetKey(KeyCode key)
+		{
+			if (!this.keyboardTable.ContainsKey(key))
 				return false;
-			return this.keyboardTable [key];
+			return this.keyboardTable[key];
 		}
 
-		public void Blit ()
+		public void Blit()
 		{
 
 
 			if (!this.watch.IsRunning)
-				this.watch.Start ();
+				this.watch.Start();
 
-			switch (this.pixelFormat) {
-			case PixelFormat.RGB:
-				this.BlitRGB ();
-				break;
-			case PixelFormat.RGBA:
-				this.BlitRGBA ();
-				break;
-			case PixelFormat.Grayscale:
-				this.BlitGrayscale ();
-				break;
-			default:
-				throw new Exception ("Unsupported PixelFormat");
+			switch (this.pixelFormat)
+			{
+				case PixelFormat.RGB:
+					this.BlitRGB();
+					break;
+				case PixelFormat.RGBA:
+					this.BlitRGBA();
+					break;
+				case PixelFormat.Grayscale:
+					this.BlitGrayscale();
+					break;
+				default:
+					throw new Exception("Unsupported PixelFormat");
 			}
 
 			// this invalidates the picturebox
 			this.pbox.Image = this.workingBitmap;
 
-			Application.DoEvents ();
+			Application.DoEvents();
 
 			this._deltaTime = (float)this.watch.Elapsed.TotalSeconds;
 
-			this.watch.Reset ();
-			this.watch.Start ();
+			this.watch.Reset();
+			this.watch.Start();
 		}
 	}
 }
