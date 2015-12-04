@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Aiv.Draw
 {
@@ -71,7 +72,14 @@ namespace Aiv.Draw
 		private Stopwatch watch;
 
 		private float _deltaTime;
-		public float deltaTime => _deltaTime;
+
+		public float deltaTime
+		{
+			get
+			{
+				return _deltaTime;
+			}
+		}
 
 		public bool opened = true;
 		private Dictionary<KeyCode, bool> keyboardTable;
@@ -109,9 +117,11 @@ namespace Aiv.Draw
 
 		public Window(int width, int height, string title, PixelFormat format)
 		{
-
 			this.form = new WindowDraw();
 			this.form.Text = title;
+			this.form.MinimizeBox = true;
+			Cursor.Hide();
+			this.form.StartPosition = FormStartPosition.CenterScreen;
 			this.form.Size = new Size(width, height);
 			Size clientSize = this.form.ClientSize;
 			this.deltaW = width - clientSize.Width;
