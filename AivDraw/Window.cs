@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Aiv.Draw
@@ -61,12 +62,24 @@ namespace Aiv.Draw
 		private PictureBox pbox;
 		private Rectangle rect;
 
+		/// <summary>
+		/// Used to draw into the form
+		/// </summary>
 		public byte[] bitmap;
 		public Bitmap workingBitmap;
 
+		/// <summary>
+		/// Window width
+		/// </summary>
 		public int width;
+		/// <summary>
+		/// Window height
+		/// </summary>
 		public int height;
 
+		/// <summary>
+		/// Get or sets the cursor visibility
+		/// </summary>
 		public bool CursorVisible
 		{
 			set
@@ -84,6 +97,9 @@ namespace Aiv.Draw
 
 		private float _deltaTime;
 
+		/// <summary>
+		/// Time (in seconds) passed since the last <c>Blit()</c>
+		/// </summary>
 		public float deltaTime
 		{
 			get
@@ -92,7 +108,12 @@ namespace Aiv.Draw
 			}
 		}
 
+		/// <summary>
+		/// Sets or get if window is opened or closed;
+		/// </summary>
 		public bool opened = true;
+
+
 		private Dictionary<KeyCode, bool> keyboardTable;
 
 
@@ -121,11 +142,26 @@ namespace Aiv.Draw
 			}
 		}
 
-		public void SetIcon(string path)
+		/// <summary>
+		/// Sets Window's Icon
+		/// </summary>
+		/// <param name="path">path to the icon</param>
+		/// <param name="isRelative">if <c>true</c>, the path will be relative to the application location, otherwise the path will be absoulte</param>
+		public void SetIcon(string path, bool isRelative)
 		{
-			this.form.Icon = new Icon(path);
+			if (isRelative)
+				this.form.Icon = new Icon(AppDomain.CurrentDomain.BaseDirectory + path);
+			else
+				this.form.Icon = new Icon(path);
 		}
 
+		/// <summary>
+		/// Creates a new Window
+		/// </summary>
+		/// <param name="width">internal window's width</param>
+		/// <param name="height">internal window's height</param>
+		/// <param name="title">window's title</param>
+		/// <param name="format">Pixel Format</param>
 		public Window(int width, int height, string title, PixelFormat format)
 		{
 			this.form = new WindowDraw();
@@ -141,7 +177,6 @@ namespace Aiv.Draw
 			this.form.FormClosed += new FormClosedEventHandler(this.Close);
 			this.form.KeyDown += new KeyEventHandler(this.KeyDown);
 			this.form.KeyUp += new KeyEventHandler(this.KeyUp);
-
 
 			this.width = width;
 			this.height = height;
@@ -181,9 +216,12 @@ namespace Aiv.Draw
 			this.keyboardTable = new Dictionary<KeyCode, bool>();
 
 			this.form.Show();
-			this.form.Focus();
+			this.form.Activate();
 		}
 
+		/// <summary>
+		/// Returns mouse X position relative to the form
+		/// </summary>
 		public int mouseX
 		{
 			get
@@ -192,6 +230,9 @@ namespace Aiv.Draw
 			}
 		}
 
+		/// <summary>
+		/// Returns mouse Y position relative to the form
+		/// </summary>
 		public int mouseY
 		{
 			get
@@ -200,6 +241,9 @@ namespace Aiv.Draw
 			}
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if mouse left button is pressed, otherwise <c>false</c>
+		/// </summary>
 		public bool mouseLeft
 		{
 			get
@@ -208,6 +252,9 @@ namespace Aiv.Draw
 			}
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if mouse right button is pressed, otherwise <c>false</c>
+		/// </summary>
 		public bool mouseRight
 		{
 			get
@@ -216,6 +263,9 @@ namespace Aiv.Draw
 			}
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if mouse middle button is pressed, otherwise <c>false</c>
+		/// </summary>
 		public bool mouseMiddle
 		{
 			get
@@ -335,6 +385,10 @@ namespace Aiv.Draw
 
 		}
 
+		/// <summary>
+		/// Returns true when <c>key</c> is pressed
+		/// </summary>
+		/// <param name="key">key to check if is pressed</param>
 		public bool GetKey(KeyCode key)
 		{
 			if (!this.keyboardTable.ContainsKey(key))
@@ -342,10 +396,11 @@ namespace Aiv.Draw
 			return this.keyboardTable[key];
 		}
 
+		/// <summary>
+		/// Draws the current <c>Window.bitmap</c> into the form
+		/// </summary>
 		public void Blit()
 		{
-
-
 			if (!this.watch.IsRunning)
 				this.watch.Start();
 
