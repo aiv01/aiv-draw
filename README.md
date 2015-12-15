@@ -23,3 +23,12 @@ namespace DrawTest
   }
 }
 ```
+
+You can get an RGBA array from images using the Sprite class:
+
+```csharp
+Sprite hero = new Sprite("heroSpriteSheet.png");
+byte []bitmap = hero.bitmap;
+int width = hero.width;
+int height = hero.height;
+```
