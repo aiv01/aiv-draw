@@ -3,8 +3,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+
 
 namespace Aiv.Draw
 {
