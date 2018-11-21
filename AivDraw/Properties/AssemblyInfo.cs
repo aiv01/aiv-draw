@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle ("AivDraw")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("AIV S.r.l., 20Tab S.r.l.")]
+[assembly: AssemblyCompany ("AIV S.r.l., Roberto De Ioris")]
 [assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("AIV S.r.l., 20Tab S.r.l.")]
+[assembly: AssemblyCopyright ("AIV S.r.l., Roberto De Ioris")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
