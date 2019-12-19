@@ -32,3 +32,9 @@ byte []bitmap = hero.bitmap;
 int width = hero.width;
 int height = hero.height;
 ```
+
+You can update Window title like this:
+
+```csharp
+window.SetTitle("Your new title");
+```
