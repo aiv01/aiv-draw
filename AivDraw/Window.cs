@@ -155,6 +155,15 @@ namespace Aiv.Draw
 		}
 
 		/// <summary>
+		/// Sets Window's Title
+		/// </summary>
+		/// <param name="text">text to be set as window title</param>
+		public void SetTitle(string text)
+		{
+			this.form.Text = text;
+		}
+
+		/// <summary>
 		/// Creates a new Window
 		/// </summary>
 		/// <param name="width">internal window's width</param>
