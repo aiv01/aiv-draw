@@ -1,2 +1,7 @@
 language: csharp
 solution: AivDraw.sln
+install:
+  - nuget restore AivDraw.sln
+script:
+  - msbuild /p:Configuration=Release AivDraw.sln
+  - nuget help
