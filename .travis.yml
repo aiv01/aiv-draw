@@ -17,8 +17,9 @@ deploy:
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
-    file: Aiv.Draw.*.nupkg
-    file: pippo.txt
+    file: 
+      - Aiv.Draw.*.nupkg
+      - AivDraw/bin/Release/AivDraw.dll
     on:
       repo: aiv01/aiv-draw
       tags: true
