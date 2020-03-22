@@ -4,10 +4,10 @@ notifications:
   email: false
 install:
   - echo "[FDF] Install"
-script: echo "[FDF] Nuget pack" \
-        && echo "pippo datas" > pippo.txt \
-        && ls -la \
-        && mkdir artifacts \
+script: echo "[FDF] Nuget pack" 
+        && echo "pippo datas" > pippo.txt 
+        && ls -la 
+        && mkdir artifacts 
         && ls -la
 deploy:
   - provider: script
