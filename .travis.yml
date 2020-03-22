@@ -8,7 +8,7 @@ script:
   - echo "[FDF] Build"
 deploy:
   - provider: script
-    script: echo "[FDF] Nuget pack" && touch pippo.txt && ls -la
+    script: echo "[FDF] Nuget pack" && echo "pippo datas" > pippo.txt && ls -la
     #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
       repo: aiv01/aiv-draw
