@@ -17,7 +17,7 @@ deploy:
   - provider: releases
     api_key: $GITHUB_API_KEY
     #file_glob: true
-    file: pippo.txt
+    file: Aiv.Draw.0.7.1.nupkg
     on:
       repo: aiv01/aiv-draw
       tags: true
