@@ -3,12 +3,12 @@ solution: AivDraw.sln
 notifications:
   email: false
 install:
-  - echo "[FDF] Install"
+  - nuget restore AivDraw.sln
 script:
-  - echo "[FDF] Build"
+  - msbuild /p:Configuration=Release AivDraw.sln
 deploy:
   - provider: script
-    script: echo "[FDF] Nuget pack" & touch pippo.txt & ls -la
+    script: nuget pack ./AivDraw.nuspec -Verbosity detailed & ls -l
     #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
       repo: aiv01/aiv-draw
@@ -17,7 +17,7 @@ deploy:
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
-    file: pippo.txt
+    file: AivDraw.*.nupkg
     on:
       repo: aiv01/aiv-draw
       tags: true
