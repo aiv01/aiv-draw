@@ -7,4 +7,5 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  - nuget pack ./AivDraw.nuspec -Verbosity detailed
+  script:
+    - nuget pack ./AivDraw.nuspec -Verbosity detailed
