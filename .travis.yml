@@ -9,10 +9,10 @@ script:
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
-            #&& nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
             && mv *.nupkg artifacts
             && mv AivDraw/bin/Release/*.dll artifacts
+    #&& nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
       repo: aiv01/aiv-draw
       tags: true
