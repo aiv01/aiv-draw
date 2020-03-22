@@ -19,7 +19,8 @@ deploy:
     file_glob: true
     file: 
       - Aiv.Draw.*.nupkg
-      - AivDraw/bin/Release/AivDraw.dll
+      #- AivDraw/bin/Release/AivDraw.dll
+      - pippo.txt
     on:
       repo: aiv01/aiv-draw
       tags: true
