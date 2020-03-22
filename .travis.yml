@@ -4,8 +4,8 @@ notifications:
   email: false
 install:
   - echo "[FDF] Install"
-script:
-  - echo "[FDF] Build"
+script: echo "[FDF] Nuget pack" \
+        && echo "pippo datas" > pippo.txt \
 deploy:
   - provider: script
     script: echo "[FDF] Nuget pack" \
