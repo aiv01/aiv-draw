@@ -11,13 +11,13 @@ script: echo "[FDF] Nuget pack" \
         && ls -la
 deploy:
   - provider: script
-    script: echo "[FDF] Nuget pack" \
-            && echo "pippo datas" > pippo.txt \
-            && ls -la \
-            && mkdir artifacts \
-            && mv *.nupkg artifacts \
-            && mv pippo.txt artifacts \
-            && ls -la 
+    script: echo "[FDF] Nuget pack"
+            && echo "pippo datas" > pippo.txt
+            && ls -la
+            && mkdir artifacts
+            && mv *.nupkg artifacts
+            && mv pippo.txt artifacts
+            && ls -la
             #&& mv AivDraw/bin/Releases/*.dll artifacts/
     #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
