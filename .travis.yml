@@ -4,4 +4,7 @@ install:
   - nuget restore AivDraw.sln
 script:
   - msbuild /p:Configuration=Release AivDraw.sln
-  - nuget help
+deploy:
+  skip_cleanup: true
+  provider: script
+  - nuget pack ./AivDraw.nuspec -Verbosity detailed
