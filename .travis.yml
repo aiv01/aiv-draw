@@ -1,5 +1,7 @@
 language: csharp
 solution: AivDraw.sln
+notifications:
+  email: false
 install:
   - nuget restore AivDraw.sln
 script:
@@ -11,7 +13,7 @@ deploy:
     on:
       repo: aiv01/aiv-draw
       tags: true
-    skip_cleanup: true
+    #skip_cleanup: true
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
@@ -19,4 +21,4 @@ deploy:
     on:
       repo: aiv01/aiv-draw
       tags: true
-    skip_cleanup: true
+    #skip_cleanup: true
