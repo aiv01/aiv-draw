@@ -7,8 +7,9 @@ install:
 script:
   - echo "[FDF] Build"
 deploy:
+  skip_cleanup: true
   - provider: script
-    script: echo "[FDF] Nuget pack" && ls -la
+    script: echo "[FDF] Nuget pack" && touch pippo.txt && ls -la
     #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
       repo: aiv01/aiv-draw
@@ -17,7 +18,8 @@ deploy:
   - provider: releases
     api_key: $GITHUB_API_KEY
     #file_glob: true
-    file: Aiv.Draw.0.7.1.nupkg
+    #file: Aiv.Draw.0.7.1.nupkg
+    file: pippo.txt
     on:
       repo: aiv01/aiv-draw
       tags: true
