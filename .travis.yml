@@ -1,5 +1,5 @@
-language: csharp
-solution: AivDraw.sln
+language: java
+#solution: AivDraw.sln
 notifications:
   email: false
 install:
