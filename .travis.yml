@@ -9,3 +9,5 @@ deploy:
   provider: script
   script:
     - nuget pack ./AivDraw.nuspec -Verbosity detailed
+  on:
+    branch: release-0.7.0
