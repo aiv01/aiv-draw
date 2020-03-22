@@ -1,21 +1,35 @@
-language: java
-#solution: AivDraw.sln
+language: csharp
+solution: AivDraw.sln
 notifications:
   email: false
 install:
-  - echo "[FDF] Install"
-script: 
-  - echo "[FDF] Nuget pack" 
+  - nuget restore AivDraw.sln
+script:
+  - msbuild /p:Configuration=Release AivDraw.sln
 deploy:
   - provider: script
-    script: echo "[FDF] Nuget pack"
-            && echo "pippo datas" > pippo.txt
-            && ls -la
+    script: nuget pack ./AivDraw.nuspec -Verbosity detailed & ls -l
+    #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
+    on:
+      repo: aiv01/aiv-draw
+      tags: true
+    #skip_cleanup: true
+  - provider: releases
+    api_key: $GITHUB_API_KEY
+    file_glob: true
+    file: AivDraw.*.nupkg
+    on:
+      repo: aiv01/aiv-draw
+      tags: true
+    #skip_cleanup: true
+
+deploy:
+  - provider: script
+    script: nuget pack ./AivDraw.nuspec -Verbosity detailed
+            #&& nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
             && mv *.nupkg artifacts
-            && mv pippo.txt artifacts
-            #&& mv AivDraw/bin/Releases/*.dll artifacts/
-    #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
+            && mv AivDraw/bin/Release/*.dll artifacts
     on:
       repo: aiv01/aiv-draw
       tags: true
@@ -23,7 +37,6 @@ deploy:
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
-    #file: Aiv.Draw.*.nupkg
     file: artifacts/*
     on:
       repo: aiv01/aiv-draw
