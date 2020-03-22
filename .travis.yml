@@ -8,23 +8,6 @@ script:
   - msbuild /p:Configuration=Release AivDraw.sln
 deploy:
   - provider: script
-    script: nuget pack ./AivDraw.nuspec -Verbosity detailed & ls -l
-    #- nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
-    on:
-      repo: aiv01/aiv-draw
-      tags: true
-    #skip_cleanup: true
-  - provider: releases
-    api_key: $GITHUB_API_KEY
-    file_glob: true
-    file: AivDraw.*.nupkg
-    on:
-      repo: aiv01/aiv-draw
-      tags: true
-    #skip_cleanup: true
-
-deploy:
-  - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
             #&& nuget push ./AivDraw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
