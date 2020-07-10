@@ -4,63 +4,13 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-
 namespace Aiv.Draw
 {
-
-	public enum PixelFormat
-	{
-		BW,
-		Grayscale,
-		RGB,
-		RGBA,
-	}
-
-	public enum KeyCode
-	{
-		A = Keys.A,
-		B = Keys.B,
-		C = Keys.C,
-		D = Keys.D,
-		E = Keys.E,
-		F = Keys.F,
-		G = Keys.G,
-		H = Keys.H,
-		I = Keys.I,
-		J = Keys.J,
-		K = Keys.K,
-		L = Keys.L,
-		M = Keys.M,
-		N = Keys.N,
-		O = Keys.O,
-		P = Keys.P,
-		Q = Keys.Q,
-		R = Keys.R,
-		S = Keys.S,
-		T = Keys.T,
-		U = Keys.U,
-		V = Keys.V,
-		W = Keys.W,
-		X = Keys.X,
-		Y = Keys.Y,
-		Z = Keys.Z,
-
-		Space = Keys.Space,
-		Return = Keys.Return,
-		Esc = Keys.Escape,
-
-		Up = Keys.Up,
-		Down = Keys.Down,
-		Left = Keys.Left,
-		Right = Keys.Right,
-	}
-
+	/// <summary>
+	/// Class able to manage a Window and drawing to it
+	/// </summary>	
 	public class Window
 	{
-		private Form form;
-		private PictureBox pbox;
-		private Rectangle rect;
-
 		/// <summary>
 		/// Used to draw into the form
 		/// </summary>
@@ -70,58 +20,34 @@ namespace Aiv.Draw
 		/// <summary>
 		/// Window width
 		/// </summary>
-		public int width;
+		public int Width { get; }
 		/// <summary>
 		/// Window height
 		/// </summary>
-		public int height;
+		public int Height { get; }
 
 		/// <summary>
-		/// Get or sets the cursor visibility
+		/// Return the pixel format for this sprite
 		/// </summary>
-		public bool CursorVisible
-		{
-			set
-			{
-				if (value)
-					Cursor.Show();
-				else
-					Cursor.Hide();
-			}
-		}
-
-		private PixelFormat pixelFormat;
-
-		private Stopwatch watch;
-
-		private float _deltaTime;
+		public PixelFormat Format { get; }
 
 		/// <summary>
 		/// Time (in seconds) passed since the last <c>Blit()</c>
 		/// </summary>
-		public float deltaTime
-		{
-			get
-			{
-				return _deltaTime;
-			}
-		}
+		public float DeltaTime { get; internal set; }
 
 		/// <summary>
 		/// Sets or get if window is opened or closed;
 		/// </summary>
 		public bool opened = true;
 
-
+		private Form form;
+		private PictureBox pbox;
+		private Rectangle rect;
 		private Dictionary<KeyCode, bool> keyboardTable;
-
-
-		private bool _mouseLeft;
-		private bool _mouseRight;
-		private bool _mouseMiddle;
-
-		private int deltaW;
-		private int deltaH;
+		private readonly int deltaW;
+		private readonly int deltaH;
+		private readonly Stopwatch timer;
 
 		private class WindowDraw : Form
 		{
@@ -144,14 +70,10 @@ namespace Aiv.Draw
 		/// <summary>
 		/// Sets Window's Icon
 		/// </summary>
-		/// <param name="path">path to the icon</param>
-		/// <param name="isRelative">if <c>true</c>, the path will be relative to the application location, otherwise the path will be absoulte</param>
-		public void SetIcon(string path, bool isRelative)
+		/// <param name="path">path to the icon. Should be an .ico file</param>
+		public void SetIcon(string path)
 		{
-			if (isRelative)
-				this.form.Icon = new Icon(AppDomain.CurrentDomain.BaseDirectory + path);
-			else
-				this.form.Icon = new Icon(path);
+			this.form.Icon = new Icon(path);
 		}
 
 		/// <summary>
@@ -161,6 +83,18 @@ namespace Aiv.Draw
 		public void SetTitle(string text)
 		{
 			this.form.Text = text;
+		}
+
+		/// <summary>
+		/// Sets mouse cursor visibility
+		/// </summary>
+		/// <param name="enabled"><c>true</c> to show mouse, <c>false</c> otherwise</param>
+		public void SetMouseVisible(bool enabled) 
+		{ 
+			if (enabled)
+				Cursor.Show();
+			else
+				Cursor.Hide();	
 		}
 
 		/// <summary>
@@ -186,10 +120,9 @@ namespace Aiv.Draw
 			this.form.KeyDown += new KeyEventHandler(this.KeyDown);
 			this.form.KeyUp += new KeyEventHandler(this.KeyUp);
 
-			this.width = width;
-			this.height = height;
-
-			this.pixelFormat = format;
+			this.Width = width;
+			this.Height = height;
+			this.Format = format;
 
 			this.rect = new Rectangle(0, 0, width, height);
 
@@ -213,13 +146,13 @@ namespace Aiv.Draw
 
 			this.workingBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 			this.pbox = new PictureBox();
-			this.pbox.Size = new Size(this.width, this.height);
+			this.pbox.Size = new Size(this.Width, this.Height);
 			this.form.Controls.Add(this.pbox);
 
 			this.pbox.MouseUp += new MouseEventHandler(this.MouseUp);
 			this.pbox.MouseDown += new MouseEventHandler(this.MouseDown);
 
-			watch = new Stopwatch();
+			timer = new Stopwatch();
 
 			this.keyboardTable = new Dictionary<KeyCode, bool>();
 
@@ -230,7 +163,7 @@ namespace Aiv.Draw
 		/// <summary>
 		/// Returns mouse X position relative to the form
 		/// </summary>
-		public int mouseX
+		public int MouseX
 		{
 			get
 			{
@@ -241,7 +174,7 @@ namespace Aiv.Draw
 		/// <summary>
 		/// Returns mouse Y position relative to the form
 		/// </summary>
-		public int mouseY
+		public int MouseY
 		{
 			get
 			{
@@ -252,56 +185,37 @@ namespace Aiv.Draw
 		/// <summary>
 		/// Returns <c>true</c> if mouse left button is pressed, otherwise <c>false</c>
 		/// </summary>
-		public bool mouseLeft
-		{
-			get
-			{
-				return this._mouseLeft;
-			}
-		}
+		public bool MouseLeft { get; internal set; }
 
 		/// <summary>
 		/// Returns <c>true</c> if mouse right button is pressed, otherwise <c>false</c>
 		/// </summary>
-		public bool mouseRight
-		{
-			get
-			{
-				return this._mouseRight;
-			}
-		}
+		public bool MouseRight { get; internal set; }
 
 		/// <summary>
 		/// Returns <c>true</c> if mouse middle button is pressed, otherwise <c>false</c>
 		/// </summary>
-		public bool mouseMiddle
-		{
-			get
-			{
-				return this._mouseMiddle;
-			}
-		}
+		public bool MouseMiddle { get; internal set; }
 
 		private void MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				this._mouseLeft = true;
+				MouseLeft = true;
 			if (e.Button == MouseButtons.Right)
-				this._mouseRight = true;
+				MouseRight = true;
 			if (e.Button == MouseButtons.Middle)
-				this._mouseMiddle = true;
+				MouseMiddle = true;
 		}
 
 		private void MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				this._mouseLeft = false;
+				MouseLeft = false;
 			if (e.Button == MouseButtons.Right)
-				this._mouseRight = false;
+				MouseRight = false;
 			if (e.Button == MouseButtons.Middle)
-				this._mouseMiddle = false;
+				MouseMiddle = false;
 		}
-
 
 		private void Close(object sender, FormClosedEventArgs e)
 		{
@@ -320,15 +234,14 @@ namespace Aiv.Draw
 
 		private unsafe void BlitRGB()
 		{
-
 			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++)
+			for (int y = 0; y < this.Height; y++)
 			{
-				for (int x = 0; x < this.width; x++)
+				for (int x = 0; x < this.Width; x++)
 				{
-					int spos = (y * this.width * 3) + (x * 3);
-					int dpos = (y * this.width * 4) + (x * 4);
+					int spos = (y * this.Width * 3) + (x * 3);
+					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
 					data[dpos] = this.bitmap[spos + 2];
 					//G
@@ -348,12 +261,12 @@ namespace Aiv.Draw
 
 			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++)
+			for (int y = 0; y < this.Height; y++)
 			{
-				for (int x = 0; x < this.width; x++)
+				for (int x = 0; x < this.Width; x++)
 				{
-					int spos = (y * this.width * 4) + (x * 4);
-					int dpos = (y * this.width * 4) + (x * 4);
+					int spos = (y * this.Width * 4) + (x * 4);
+					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
 					data[dpos] = this.bitmap[spos + 2];
 					//G
@@ -373,12 +286,12 @@ namespace Aiv.Draw
 
 			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
-			for (int y = 0; y < this.height; y++)
+			for (int y = 0; y < this.Height; y++)
 			{
-				for (int x = 0; x < this.width; x++)
+				for (int x = 0; x < this.Width; x++)
 				{
-					int spos = (y * this.width) + x;
-					int dpos = (y * this.width * 4) + (x * 4);
+					int spos = (y * this.Width) + x;
+					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
 					data[dpos] = this.bitmap[spos];
 					//G
@@ -409,10 +322,10 @@ namespace Aiv.Draw
 		/// </summary>
 		public void Blit()
 		{
-			if (!this.watch.IsRunning)
-				this.watch.Start();
+			if (!this.timer.IsRunning)
+				this.timer.Start();
 
-			switch (this.pixelFormat)
+			switch (this.Format)
 			{
 				case PixelFormat.RGB:
 					this.BlitRGB();
@@ -432,10 +345,10 @@ namespace Aiv.Draw
 
 			Application.DoEvents();
 
-			this._deltaTime = (float)this.watch.Elapsed.TotalSeconds;
+			DeltaTime = (float)this.timer.Elapsed.TotalSeconds;
 
-			this.watch.Reset();
-			this.watch.Start();
+			this.timer.Reset();
+			this.timer.Start();
 		}
 	}
 }
