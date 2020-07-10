@@ -1,65 +1,124 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace Aiv.Draw
 {
+	/// <summary>
+	/// Class able to load an image
+	/// </summary>
 	public class Sprite
 	{
+		/// <summary>
+		/// Return raw sprite data in bytes
+		/// </summary>
+		public byte[] Bitmap { get; }
+		
+		/// <summary>
+		/// Sprite's width in pixel
+		/// </summary>
+		public int Width { get; }
 
-		public byte[] bitmap;
-		private int _width;
-		private int _height;
+		/// <summary>
+		/// Sprite's height in pixel
+		/// </summary>
+		public int Height { get; }
 
-		public int width {
-			get {
-				return _width;
-			}
-		}
+		/// <summary>
+		/// Return the pixel format for this sprite
+		/// </summary>
+		public PixelFormat Format { get; }
 
-		public int height {
-			get {
-				return _height;
-			}
-		}
+		/// <summary>
+		/// Depth in bits. E.g.: 24bit, 32bit 
+		/// </summary>
+		public int Depth { get; }
 
-		private unsafe void ConvertToRGBA(Bitmap bitmap) {
+		private unsafe void StoreBitmapAsRGBA(Bitmap bitmap) {
 			Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 			System.Drawing.Imaging.BitmapData bdata = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
 
 			// fix ordering as in windows all is little endian ARGB -> BGRA -> RGBA
-			for (int y = 0; y < this._height; y++) {
-				for (int x = 0; x < this._width; x++) {
-					int spos = (y * this._width * 4) + (x * 4);
-					int dpos = (y * this._width * 4) + (x * 4);
+			for (int y = 0; y < Height; y++) {
+				for (int x = 0; x < Width; x++) {
+					int spos = (y * Width * 4) + (x * 4);
+					int dpos = (y * Width * 4) + (x * 4);
 
 					// R
-					this.bitmap[dpos] = data[spos+2];
+					this.Bitmap[dpos] = data[spos+2];
 					// G
-					this.bitmap[dpos+1] = data[spos+1];
+					this.Bitmap[dpos+1] = data[spos+1];
 					// B
-					this.bitmap[dpos + 2] = data[spos];
+					this.Bitmap[dpos + 2] = data[spos];
 					// A
-					this.bitmap[dpos + 3] = data[spos+3];
-
+					this.Bitmap[dpos + 3] = data[spos+3];
 				}
 			}
-
 			bitmap.UnlockBits(bdata);
 		}
 
-		public Sprite (string fileName)
+		private void StoreBitmapAsRGB(Bitmap bitmap)
 		{
-			Bitmap _bitmap = new Bitmap (fileName);
-			if (_bitmap.PixelFormat != System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-				throw new Exception ("invalid sprite format, must be RGBA");
-			this._width = _bitmap.Width;
-			this._height = _bitmap.Height;
+			for (int y = 0; y < Height; y++)
+			{
+				for (int x = 0; x < Width; x++)
+				{
+					int dpos = (y * Width * 3) + (x * 3);
+					Color sourcePixel = bitmap.GetPixel(x, y);
 
-			this.bitmap = new byte[this._width * this._height * 4];
+					// R
+					this.Bitmap[dpos + 0] = sourcePixel.R;
+					// G
+					this.Bitmap[dpos + 1] = sourcePixel.G;
+					// B
+					this.Bitmap[dpos + 2] = sourcePixel.B;
+				}
+			}
+		}
 
-			this.ConvertToRGBA (_bitmap);
+		/// <summary>
+		/// Create a Sprite object loading an image from a filesystem path
+		/// </summary>
+		/// <param name="fileName">path to the image</param>
+		/// <exception cref="FileNotFoundException">if file doesn't not exits</exception>
+		/// <exception cref="ArgumentException">if the the image is not in valid format</exception>
+		public Sprite(string fileName)
+		{
+			Bitmap rawBitmap = null;
+			try
+			{
+				rawBitmap = new Bitmap(fileName);
+			} catch (FileNotFoundException e)
+			{
+				throw new FileNotFoundException(fileName, e);
+			} catch (ArgumentException e)
+			{
+				//Bitmap should throw only FileNotFoundException,
+				//but sometime ArgumentException appear instead.
+				throw new FileNotFoundException(fileName, e);
+			}
 
+			Width = rawBitmap.Width;
+			Height = rawBitmap.Height;
+
+			switch (rawBitmap.PixelFormat)
+			{
+				case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
+					Depth = 32;
+					Format = PixelFormat.RGBA;
+					this.Bitmap = new byte[Width * Height * Depth/8];
+					this.StoreBitmapAsRGBA(rawBitmap);
+					break;
+				case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+					Depth = 24;
+					Format = PixelFormat.RGB;
+					this.Bitmap = new byte[Width * Height * Depth/8];
+					this.StoreBitmapAsRGB(rawBitmap);
+					break;
+				default: throw new ArgumentException("Invalid sprite format, must be RGB or RGBA");
+			}
 		}
 	}
 }
