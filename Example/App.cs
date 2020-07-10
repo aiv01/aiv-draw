@@ -163,9 +163,9 @@ namespace Example
                     {
                         int destinPos = (y * win.Width + x) * 3;
                         int sourcePos = (y * square.Width + x) * 3;
-                        win.bitmap[destinPos + 0] = square.Bitmap[sourcePos + 0];
-                        win.bitmap[destinPos + 1] = square.Bitmap[sourcePos + 1];
-                        win.bitmap[destinPos + 2] = square.Bitmap[sourcePos + 2];
+                        win.Bitmap[destinPos + 0] = square.Bitmap[sourcePos + 0];
+                        win.Bitmap[destinPos + 1] = square.Bitmap[sourcePos + 1];
+                        win.Bitmap[destinPos + 2] = square.Bitmap[sourcePos + 2];
                     }
                 }
 
@@ -190,9 +190,9 @@ namespace Example
 
         private static void Clear(Window win) 
         {
-            for (int i = 0; i < win.bitmap.Length; i++)
+            for (int i = 0; i < win.Bitmap.Length; i++)
             {
-                win.bitmap[i] = 0;
+                win.Bitmap[i] = 0;
             }
         }
 
@@ -203,9 +203,9 @@ namespace Example
                 for (int y = posY; y < posY + size; y++)
                 {
                     int basePos = (y * win.Width + x) * 3; // 3 = number of bytes for RGB pixel
-                    win.bitmap[basePos + 0] = 255;  //R
-                    win.bitmap[basePos + 1] =   0;  //G
-                    win.bitmap[basePos + 2] =   0;  //B
+                    win.Bitmap[basePos + 0] = 255;  //R
+                    win.Bitmap[basePos + 1] =   0;  //G
+                    win.Bitmap[basePos + 2] =   0;  //B
                 }
             }
         }

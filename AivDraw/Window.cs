@@ -12,17 +12,16 @@ namespace Aiv.Draw
 	public class Window
 	{
 		/// <summary>
-		/// Used to draw into the form
+		/// Used to draw pixel bytes into the form
 		/// </summary>
-		public byte[] bitmap;
-		public Bitmap workingBitmap;
+		public byte[] Bitmap { get; }
 
 		/// <summary>
-		/// Window width
+		/// Window width in pixel
 		/// </summary>
 		public int Width { get; }
 		/// <summary>
-		/// Window height
+		/// Window height in pixel
 		/// </summary>
 		public int Height { get; }
 
@@ -44,26 +43,37 @@ namespace Aiv.Draw
 		private Form form;
 		private PictureBox pbox;
 		private Rectangle rect;
+		private Bitmap workingBitmap;
+		
 		private Dictionary<KeyCode, bool> keyboardTable;
-		private readonly int deltaW;
-		private readonly int deltaH;
 		private readonly Stopwatch timer;
-
-		private class WindowDraw : Form
+		
+		/// <summary>
+		/// This class it's necessary because <c>SetStyle</c> method is <c>protected</c>
+		/// </summary>
+		private class FormAdapter : Form
 		{
-			public WindowDraw()
+			public FormAdapter(int width, int height, string title)
 			{
 				StartPosition = FormStartPosition.CenterScreen;
 				FormBorderStyle = FormBorderStyle.FixedSingle;
+				MinimizeBox = true;
 				MaximizeBox = false;
-				MinimizeBox = false;
 
-				this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-				this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-				this.SetStyle(ControlStyles.UserPaint, false);
-				this.SetStyle(ControlStyles.FixedWidth, true);
-				this.SetStyle(ControlStyles.FixedHeight, true);
+				SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+				SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+				SetStyle(ControlStyles.UserPaint, false);
+				SetStyle(ControlStyles.FixedWidth, true);
+				SetStyle(ControlStyles.FixedHeight, true);
 
+				Text = title;
+				
+				//Calculate form size taking into account delta
+				//to have a real width x height window
+				Size = new Size(width, height);
+				int deltaW = width - ClientSize.Width;
+				int deltaH = height - ClientSize.Height;
+				Size = new Size(width + deltaW, height + deltaH);
 			}
 		}
 
@@ -106,39 +116,31 @@ namespace Aiv.Draw
 		/// <param name="format">Pixel Format</param>
 		public Window(int width, int height, string title, PixelFormat format)
 		{
-			this.form = new WindowDraw();
-			this.form.Text = title;
-			this.form.MinimizeBox = true;
-			this.form.StartPosition = FormStartPosition.CenterScreen;
-			this.form.Size = new Size(width, height);
-			Size clientSize = this.form.ClientSize;
-			this.deltaW = width - clientSize.Width;
-			this.deltaH = height - clientSize.Height;
-			this.form.Size = new Size(width + this.deltaW, height + this.deltaH);
+			form = new FormAdapter(width, height, title);
+			
+			form.FormClosed += new FormClosedEventHandler(this.Close);
+			form.KeyDown += new KeyEventHandler(this.KeyDown);
+			form.KeyUp += new KeyEventHandler(this.KeyUp);
 
-			this.form.FormClosed += new FormClosedEventHandler(this.Close);
-			this.form.KeyDown += new KeyEventHandler(this.KeyDown);
-			this.form.KeyUp += new KeyEventHandler(this.KeyUp);
-
-			this.Width = width;
-			this.Height = height;
-			this.Format = format;
+			Width = width;
+			Height = height;
+			Format = format;
 
 			this.rect = new Rectangle(0, 0, width, height);
 
 			switch (format)
 			{
 				case PixelFormat.BW:
-					this.bitmap = new byte[width * height / 8];
+					this.Bitmap = new byte[width * height / 8];
 					break;
 				case PixelFormat.Grayscale:
-					this.bitmap = new byte[width * height];
+					this.Bitmap = new byte[width * height];
 					break;
 				case PixelFormat.RGB:
-					this.bitmap = new byte[width * height * 3];
+					this.Bitmap = new byte[width * height * 3];
 					break;
 				case PixelFormat.RGBA:
-					this.bitmap = new byte[width * height * 4];
+					this.Bitmap = new byte[width * height * 4];
 					break;
 				default:
 					throw new Exception("Unsupported PixelFormat");
@@ -243,11 +245,11 @@ namespace Aiv.Draw
 					int spos = (y * this.Width * 3) + (x * 3);
 					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
-					data[dpos] = this.bitmap[spos + 2];
+					data[dpos] = this.Bitmap[spos + 2];
 					//G
-					data[dpos + 1] = this.bitmap[spos + 1];
+					data[dpos + 1] = this.Bitmap[spos + 1];
 					//R
-					data[dpos + 2] = this.bitmap[spos];
+					data[dpos + 2] = this.Bitmap[spos];
 					//A
 					data[dpos + 3] = 0xff;
 				}
@@ -268,13 +270,13 @@ namespace Aiv.Draw
 					int spos = (y * this.Width * 4) + (x * 4);
 					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
-					data[dpos] = this.bitmap[spos + 2];
+					data[dpos] = this.Bitmap[spos + 2];
 					//G
-					data[dpos + 1] = this.bitmap[spos + 1];
+					data[dpos + 1] = this.Bitmap[spos + 1];
 					//R
-					data[dpos + 2] = this.bitmap[spos];
+					data[dpos + 2] = this.Bitmap[spos];
 					//A
-					data[dpos + 3] = this.bitmap[spos + 3];
+					data[dpos + 3] = this.Bitmap[spos + 3];
 				}
 			}
 			this.workingBitmap.UnlockBits(bdata);
@@ -293,11 +295,11 @@ namespace Aiv.Draw
 					int spos = (y * this.Width) + x;
 					int dpos = (y * this.Width * 4) + (x * 4);
 					//B
-					data[dpos] = this.bitmap[spos];
+					data[dpos] = this.Bitmap[spos];
 					//G
-					data[dpos + 1] = this.bitmap[spos];
+					data[dpos + 1] = this.Bitmap[spos];
 					//R
-					data[dpos + 2] = this.bitmap[spos];
+					data[dpos + 2] = this.Bitmap[spos];
 					//A
 					data[dpos + 3] = 0xff;
 				}
@@ -350,6 +352,7 @@ namespace Aiv.Draw
 			this.timer.Reset();
 			this.timer.Start();
 		}
+
 	}
 }
 
