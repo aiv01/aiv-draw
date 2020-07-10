@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivDraw", "AivDraw\AivDraw.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{4E02FE1C-D576-4AF3-B520-DA27295C21EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{8D5BCBBA-3A69-4729-A526-5C0AE697E000}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,14 @@ Global
 		{4E02FE1C-D576-4AF3-B520-DA27295C21EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E02FE1C-D576-4AF3-B520-DA27295C21EE}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E02FE1C-D576-4AF3-B520-DA27295C21EE}.Release|x86.Build.0 = Release|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Debug|x86.Build.0 = Debug|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D5BCBBA-3A69-4729-A526-5C0AE697E000}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
