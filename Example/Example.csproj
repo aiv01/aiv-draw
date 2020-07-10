@@ -44,5 +44,10 @@
   <ItemGroup>
     <Compile Include="App.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="square.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

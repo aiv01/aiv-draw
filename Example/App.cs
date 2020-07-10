@@ -1,5 +1,6 @@
 ﻿using Aiv.Draw;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +19,11 @@ namespace Example
             Console.WriteLine("[3] Moving Square");
             Console.WriteLine("[4] Moving Square by WASD");
             Console.WriteLine("[5] Drawing Square by Mouse");
+            Console.WriteLine("[6] Drawing Sprite");
             Console.WriteLine();
 
             int minChoice = 1;
-            int maxChoice = 5;
+            int maxChoice = 6;
             int choice;
             do
             {
@@ -43,6 +45,7 @@ namespace Example
                 case 3: Example03_MovingSquare(); break;
                 case 4: Example04_MovingSquareByWASD(); break;
                 case 5: Example05_DrawingSquareByMouse(); break;
+                case 6: Example06_DrawingSprite(); break;
             }
 
         }
@@ -143,7 +146,31 @@ namespace Example
                 win.Blit();
             }
         }
-  
+
+        private static void Example06_DrawingSprite()
+        {
+            Window win = new Window(800, 600, "AivDraw Drawing Sprite", PixelFormat.RGB);
+
+            Sprite square = new Sprite("square.png");
+
+            while (win.opened)
+            {
+                for(int y = 0; y < square.Height; y++)
+                {
+                    for (int x = 0; x < square.Width; x++)
+                    {
+                        int destinPos = (y * win.width + x) * 3;
+                        int sourcePos = (y * square.Width + x) * 3;
+                        win.bitmap[destinPos + 0] = square.Bitmap[sourcePos + 0];
+                        win.bitmap[destinPos + 1] = square.Bitmap[sourcePos + 1];
+                        win.bitmap[destinPos + 2] = square.Bitmap[sourcePos + 2];
+                    }
+                }
+
+                win.Blit();
+            }
+        }
+
         private static void Clear(Window win) 
         {
             for (int i = 0; i < win.bitmap.Length; i++)
