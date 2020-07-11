@@ -126,7 +126,14 @@ namespace Aiv.Draw
 			Height = height;
 			Format = format;
 
-			this.rect = new Rectangle(0, 0, width, height);
+			timer = new Stopwatch();
+			this.keyboardTable = new Dictionary<KeyCode, bool>();
+
+			this.pbox = new PictureBox();
+			this.pbox.Size = new Size(this.Width, this.Height);
+			this.pbox.MouseUp += new MouseEventHandler(this.MouseUp);
+			this.pbox.MouseDown += new MouseEventHandler(this.MouseDown);
+			this.form.Controls.Add(this.pbox);
 
 			switch (format)
 			{
@@ -146,20 +153,12 @@ namespace Aiv.Draw
 					throw new Exception("Unsupported PixelFormat");
 			}
 
+			//TODO: Extract class RawBitmap (exposing BlitRGB, BlitRGBA, BlitGrayScale)
+			this.rect = new Rectangle(0, 0, width, height);
 			this.workingBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			this.pbox = new PictureBox();
-			this.pbox.Size = new Size(this.Width, this.Height);
-			this.form.Controls.Add(this.pbox);
-
-			this.pbox.MouseUp += new MouseEventHandler(this.MouseUp);
-			this.pbox.MouseDown += new MouseEventHandler(this.MouseDown);
-
-			timer = new Stopwatch();
-
-			this.keyboardTable = new Dictionary<KeyCode, bool>();
-
-			this.form.Show();
-			this.form.Activate();
+						
+			this.form.Show(); //make the form visible
+			this.form.Activate(); //make sure the form is on front and ready to catch events
 		}
 
 		/// <summary>
@@ -203,9 +202,9 @@ namespace Aiv.Draw
 		{
 			if (e.Button == MouseButtons.Left)
 				MouseLeft = true;
-			if (e.Button == MouseButtons.Right)
+			else if (e.Button == MouseButtons.Right)
 				MouseRight = true;
-			if (e.Button == MouseButtons.Middle)
+			else if (e.Button == MouseButtons.Middle)
 				MouseMiddle = true;
 		}
 
@@ -213,9 +212,9 @@ namespace Aiv.Draw
 		{
 			if (e.Button == MouseButtons.Left)
 				MouseLeft = false;
-			if (e.Button == MouseButtons.Right)
+			else if (e.Button == MouseButtons.Right)
 				MouseRight = false;
-			if (e.Button == MouseButtons.Middle)
+			else if (e.Button == MouseButtons.Middle)
 				MouseMiddle = false;
 		}
 
