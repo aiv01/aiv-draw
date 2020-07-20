@@ -36,9 +36,9 @@ namespace Aiv.Draw
 		public float DeltaTime { get; internal set; }
 
 		/// <summary>
-		/// Sets or get if window is opened or closed;
+		/// Check if window is opened or closed;
 		/// </summary>
-		public bool opened = true;
+		public bool IsOpened { get; internal set; }
 
 		private Form form;
 		private PictureBox pbox;
@@ -118,7 +118,7 @@ namespace Aiv.Draw
 		{
 			form = new FormAdapter(width, height, title);
 			
-			form.FormClosed += new FormClosedEventHandler(this.Close);
+			form.FormClosed += new FormClosedEventHandler(this.CloseHandler);
 			form.KeyDown += new KeyEventHandler(this.KeyDown);
 			form.KeyUp += new KeyEventHandler(this.KeyUp);
 
@@ -161,6 +161,18 @@ namespace Aiv.Draw
 						
 			this.form.Show(); //make the form visible
 			this.form.Activate(); //make sure the form is on front and ready to catch events
+
+			IsOpened = true;
+		}
+
+		/// <summary>
+		/// Close this window
+		/// </summary>
+		public void Close()
+		{
+			form.Close();
+			form.Dispose();
+			IsOpened = false;
 		}
 
 		/// <summary>
@@ -264,9 +276,9 @@ namespace Aiv.Draw
 				MouseMiddle = false;
 		}
 
-		private void Close(object sender, FormClosedEventArgs e)
+		private void CloseHandler(object sender, FormClosedEventArgs e)
 		{
-			this.opened = false;
+			this.IsOpened = false;
 		}
 
 		private void KeyDown(object sender, KeyEventArgs e)
