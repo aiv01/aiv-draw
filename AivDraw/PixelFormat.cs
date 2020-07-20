@@ -11,8 +11,8 @@ namespace Aiv.Draw
 	/// </summary>
 	public enum PixelFormat
 	{
-		BW,
-		Grayscale,
+		BlackWhite,
+		GrayScale,
 		RGB,
 		RGBA,
 	}

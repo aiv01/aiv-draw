@@ -21,10 +21,11 @@ namespace Example
             Console.WriteLine("[5] Drawing Square by Mouse");
             Console.WriteLine("[6] Drawing Sprite");
             Console.WriteLine("[7] Misc features");
+            Console.WriteLine("[8] Black & White");
             Console.WriteLine();
 
             int minChoice = 1;
-            int maxChoice = 7;
+            int maxChoice = 8;
             int choice;
             do
             {
@@ -48,6 +49,7 @@ namespace Example
                 case 5: Example05_DrawingSquareByMouse(); break;
                 case 6: Example06_DrawingSprite(); break;
                 case 7: Example07_MiscFeatures(); break;
+                case 8: Example08_BlackAndWhite(); break;
             }
 
         }
@@ -185,6 +187,20 @@ namespace Example
             while (win.opened)
             {
                 win.SetTitle("Counter: " + count++);
+                win.Blit();
+            }
+        }
+
+        private static void Example08_BlackAndWhite()
+        {
+            Window win = new Window(800, 600, "AivDraw Black & White", PixelFormat.BlackWhite);
+
+            while (win.opened)
+            {
+                for(int i=0; i < win.Bitmap.Length; i++)
+                {
+                    win.Bitmap[i] = 1;
+                }
                 win.Blit();
             }
         }

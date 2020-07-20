@@ -137,10 +137,13 @@ namespace Aiv.Draw
 
 			switch (format)
 			{
-				case PixelFormat.BW:
-					this.Bitmap = new byte[width * height / 8];
+				case PixelFormat.BlackWhite:
+					int byteSize = width * height;
+					int bitSize = width * height / 8;
+					if (bitSize * 8 != byteSize) throw new Exception("In BlackWhite format, Width * Height must be divisible by 8");
+					this.Bitmap = new byte[bitSize];
 					break;
-				case PixelFormat.Grayscale:
+				case PixelFormat.GrayScale:
 					this.Bitmap = new byte[width * height];
 					break;
 				case PixelFormat.RGB:
@@ -223,8 +226,11 @@ namespace Aiv.Draw
 				case PixelFormat.RGBA:
 					this.BlitRGBA();
 					break;
-				case PixelFormat.Grayscale:
-					this.BlitGrayscale();
+				case PixelFormat.GrayScale:
+					this.BlitGrayScale();
+					break;
+				case PixelFormat.BlackWhite:
+					this.BlitBlackWhite();
 					break;
 				default:
 					throw new Exception("Unsupported PixelFormat");
@@ -322,7 +328,7 @@ namespace Aiv.Draw
 
 		}
 
-		private unsafe void BlitGrayscale()
+		private unsafe void BlitGrayScale()
 		{
 
 			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.workingRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
@@ -341,6 +347,39 @@ namespace Aiv.Draw
 					data[dpos + 2] = this.Bitmap[spos];
 					//A
 					data[dpos + 3] = 0xff;
+				}
+			}
+			this.workingBitmap.UnlockBits(bdata);
+		}
+
+		private unsafe void BlitBlackWhite()
+		{
+
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.workingRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+			byte* data = (byte*)bdata.Scan0;
+
+			int bitShift = 7;
+			for (int y = 0; y < this.Height; y++)
+			{
+				for (int x = 0; x < this.Width; x++)
+				{
+					int spos = (y * this.Width + x ) / 8; //arrotonda sempre all'intero inferire
+					int dpos = (y * this.Width * 4) + (x * 4);
+
+					byte sourceByte = this.Bitmap[spos];
+					byte value = (byte)(((sourceByte >> bitShift) & 1) * 255);  //value will be 255 or 0
+
+					//B
+					data[dpos + 0] = value;
+					//G
+					data[dpos + 1] = value;
+					//R
+					data[dpos + 2] = value;
+					//A
+					data[dpos + 3] = 0xff;
+
+					bitShift--;
+					if (bitShift == -1) bitShift = 7;
 				}
 			}
 			this.workingBitmap.UnlockBits(bdata);
