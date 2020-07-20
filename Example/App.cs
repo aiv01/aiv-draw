@@ -20,10 +20,11 @@ namespace Example
             Console.WriteLine("[4] Moving Square by WASD");
             Console.WriteLine("[5] Drawing Square by Mouse");
             Console.WriteLine("[6] Drawing Sprite");
+            Console.WriteLine("[7] Misc features");
             Console.WriteLine();
 
             int minChoice = 1;
-            int maxChoice = 6;
+            int maxChoice = 7;
             int choice;
             do
             {
@@ -46,6 +47,7 @@ namespace Example
                 case 4: Example04_MovingSquareByWASD(); break;
                 case 5: Example05_DrawingSquareByMouse(); break;
                 case 6: Example06_DrawingSprite(); break;
+                case 7: Example07_MiscFeatures(); break;
             }
 
         }
@@ -56,7 +58,8 @@ namespace Example
 
             while (win.opened)
             {
-                Console.WriteLine("Looping ...");
+                //Console.WriteLine("Looping ...");
+                Console.WriteLine(win.DeltaTime);
                 win.Blit();
             }
         }
@@ -84,7 +87,7 @@ namespace Example
             {
                 Clear(win);
 
-                posX += (win.deltaTime * speed);
+                posX += (win.DeltaTime * speed);
 
                 DrawSquare(win, (int)posX, 10, size);
 
@@ -107,19 +110,19 @@ namespace Example
                 
                 if (win.GetKey(KeyCode.W))
                 {
-                    posY -= (win.deltaTime * speed);
+                    posY -= (win.DeltaTime * speed);
                 }
                 if (win.GetKey(KeyCode.S))
                 {
-                    posY += (win.deltaTime * speed);
+                    posY += (win.DeltaTime * speed);
                 }
                 if (win.GetKey(KeyCode.A))
                 {
-                    posX -= (win.deltaTime * speed);
+                    posX -= (win.DeltaTime * speed);
                 }
                 if (win.GetKey(KeyCode.D))
                 {
-                    posX += (win.deltaTime * speed);
+                    posX += (win.DeltaTime * speed);
                 }
 
                 DrawSquare(win, (int)posX, (int)posY, size);
@@ -136,10 +139,10 @@ namespace Example
             {
                 Clear(win);
 
-                if (win.mouseLeft)
+                if (win.MouseLeft)
                 {
-                    int posX = win.mouseX;
-                    int posY = win.mouseY;
+                    int posX = win.MouseX;
+                    int posY = win.MouseY;
                     DrawSquare(win, posX, posY, 50);
                 }
                 
@@ -159,11 +162,11 @@ namespace Example
                 {
                     for (int x = 0; x < square.Width; x++)
                     {
-                        int destinPos = (y * win.width + x) * 3;
+                        int destinPos = (y * win.Width + x) * 3;
                         int sourcePos = (y * square.Width + x) * 3;
-                        win.bitmap[destinPos + 0] = square.Bitmap[sourcePos + 0];
-                        win.bitmap[destinPos + 1] = square.Bitmap[sourcePos + 1];
-                        win.bitmap[destinPos + 2] = square.Bitmap[sourcePos + 2];
+                        win.Bitmap[destinPos + 0] = square.Bitmap[sourcePos + 0];
+                        win.Bitmap[destinPos + 1] = square.Bitmap[sourcePos + 1];
+                        win.Bitmap[destinPos + 2] = square.Bitmap[sourcePos + 2];
                     }
                 }
 
@@ -171,11 +174,26 @@ namespace Example
             }
         }
 
+        private static void Example07_MiscFeatures()
+        {
+            Window win = new Window(800, 600, "AivDraw Misc Features", PixelFormat.RGB);
+
+            win.SetIcon("square.ico");
+            win.SetMouseVisible(false);
+
+            int count = 0;
+            while (win.opened)
+            {
+                win.SetTitle("Counter: " + count++);
+                win.Blit();
+            }
+        }
+
         private static void Clear(Window win) 
         {
-            for (int i = 0; i < win.bitmap.Length; i++)
+            for (int i = 0; i < win.Bitmap.Length; i++)
             {
-                win.bitmap[i] = 0;
+                win.Bitmap[i] = 0;
             }
         }
 
@@ -185,10 +203,10 @@ namespace Example
             {
                 for (int y = posY; y < posY + size; y++)
                 {
-                    int basePos = (y * win.width + x) * 3; // 3 = number of bytes for RGB pixel
-                    win.bitmap[basePos + 0] = 255;  //R
-                    win.bitmap[basePos + 1] =   0;  //G
-                    win.bitmap[basePos + 2] =   0;  //B
+                    int basePos = (y * win.Width + x) * 3; // 3 = number of bytes for RGB pixel
+                    win.Bitmap[basePos + 0] = 255;  //R
+                    win.Bitmap[basePos + 1] =   0;  //G
+                    win.Bitmap[basePos + 2] =   0;  //B
                 }
             }
         }

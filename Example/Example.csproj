@@ -45,6 +45,9 @@
     <Compile Include="App.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="square.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="square.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
