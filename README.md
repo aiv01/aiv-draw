@@ -38,3 +38,8 @@ You can update Window title like this:
 ```csharp
 window.SetTitle("Your new title");
 ```
+
+## Constraints
+Library tested on:
+* Visual Studio 2019 v16.6.4
+* .NET Framework 4.8
