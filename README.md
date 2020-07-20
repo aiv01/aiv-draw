@@ -39,7 +39,7 @@ You can update Window title like this:
 window.SetTitle("Your new title");
 ```
 
-## Constraints
+## Compliance
 Library tested on:
 * Visual Studio 2019 v16.6.4
 * .NET Framework 4.8
