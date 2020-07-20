@@ -58,7 +58,7 @@ namespace Example
         {
             Window win = new Window(800, 600, "AivDraw Basic Loop", PixelFormat.RGB);
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 //Console.WriteLine("Looping ...");
                 Console.WriteLine(win.DeltaTime);
@@ -70,7 +70,7 @@ namespace Example
         {
             Window win = new Window(800, 600, "AivDraw Drawing Square", PixelFormat.RGB);
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 DrawSquare(win, 10, 10, 50);
                 win.Blit();
@@ -85,7 +85,7 @@ namespace Example
             float posX = 0;
             int size = 50;
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 Clear(win);
 
@@ -106,7 +106,7 @@ namespace Example
             float posY = 0;
             int size = 50;
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 Clear(win);
                 
@@ -137,7 +137,7 @@ namespace Example
         {
             Window win = new Window(800, 600, "AivDraw Drawing Square by Mouse", PixelFormat.RGB);
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 Clear(win);
 
@@ -158,7 +158,7 @@ namespace Example
 
             Sprite square = new Sprite("square.png");
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 for(int y = 0; y < square.Height; y++)
                 {
@@ -184,10 +184,13 @@ namespace Example
             win.SetMouseVisible(false);
 
             int count = 0;
-            while (win.opened)
+            while (win.IsOpened)
             {
                 win.SetTitle("Counter: " + count++);
+
                 win.Blit();
+
+                if (win.MouseRight) win.Close();
             }
         }
 
@@ -195,7 +198,7 @@ namespace Example
         {
             Window win = new Window(800, 600, "AivDraw Black & White", PixelFormat.BlackWhite);
 
-            while (win.opened)
+            while (win.IsOpened)
             {
                 for(int i=0; i < win.Bitmap.Length; i++)
                 {

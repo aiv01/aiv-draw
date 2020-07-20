@@ -36,9 +36,9 @@ namespace Aiv.Draw
 		public float DeltaTime { get; internal set; }
 
 		/// <summary>
-		/// Sets or get if window is opened or closed;
+		/// Check if window is opened or closed;
 		/// </summary>
-		public bool opened = true;
+		public bool IsOpened { get; internal set; }
 
 		private Form form;
 		private PictureBox pbox;
@@ -48,65 +48,6 @@ namespace Aiv.Draw
 		private Dictionary<KeyCode, bool> keyboardTable;
 		private readonly Stopwatch timer;
 		
-		/// <summary>
-		/// This class it's necessary because <c>SetStyle</c> method is <c>protected</c>
-		/// </summary>
-		private class FormAdapter : Form
-		{
-			public FormAdapter(int width, int height, string title)
-			{
-				StartPosition = FormStartPosition.CenterScreen;
-				FormBorderStyle = FormBorderStyle.FixedSingle;
-				MinimizeBox = true;
-				MaximizeBox = false;
-
-				SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-				SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-				SetStyle(ControlStyles.UserPaint, false);
-				SetStyle(ControlStyles.FixedWidth, true);
-				SetStyle(ControlStyles.FixedHeight, true);
-
-				Text = title;
-				
-				//Calculate form size taking into account delta
-				//to have a real width x height window
-				Size = new Size(width, height);
-				int deltaW = width - ClientSize.Width;
-				int deltaH = height - ClientSize.Height;
-				Size = new Size(width + deltaW, height + deltaH);
-			}
-		}
-
-		/// <summary>
-		/// Sets Window's Icon
-		/// </summary>
-		/// <param name="path">path to the icon. Should be an .ico file</param>
-		public void SetIcon(string path)
-		{
-			this.form.Icon = new Icon(path);
-		}
-
-		/// <summary>
-		/// Sets Window's Title
-		/// </summary>
-		/// <param name="text">text to be set as window title</param>
-		public void SetTitle(string text)
-		{
-			this.form.Text = text;
-		}
-
-		/// <summary>
-		/// Sets mouse cursor visibility
-		/// </summary>
-		/// <param name="enabled"><c>true</c> to show mouse, <c>false</c> otherwise</param>
-		public void SetMouseVisible(bool enabled) 
-		{ 
-			if (enabled)
-				Cursor.Show();
-			else
-				Cursor.Hide();	
-		}
-
 		/// <summary>
 		/// Creates a new Window
 		/// </summary>
@@ -118,9 +59,9 @@ namespace Aiv.Draw
 		{
 			form = new FormAdapter(width, height, title);
 			
-			form.FormClosed += new FormClosedEventHandler(this.Close);
-			form.KeyDown += new KeyEventHandler(this.KeyDown);
-			form.KeyUp += new KeyEventHandler(this.KeyUp);
+			form.FormClosed += new FormClosedEventHandler(this.CloseHandler);
+			form.KeyDown += new KeyEventHandler(this.KeyDownHandler);
+			form.KeyUp += new KeyEventHandler(this.KeyUpHandler);
 
 			Width = width;
 			Height = height;
@@ -131,8 +72,8 @@ namespace Aiv.Draw
 
 			this.pbox = new PictureBox();
 			this.pbox.Size = new Size(this.Width, this.Height);
-			this.pbox.MouseUp += new MouseEventHandler(this.MouseUp);
-			this.pbox.MouseDown += new MouseEventHandler(this.MouseDown);
+			this.pbox.MouseUp += new MouseEventHandler(this.MouseUpHandler);
+			this.pbox.MouseDown += new MouseEventHandler(this.MouseDownHandler);
 			this.form.Controls.Add(this.pbox);
 
 			switch (format)
@@ -161,6 +102,48 @@ namespace Aiv.Draw
 						
 			this.form.Show(); //make the form visible
 			this.form.Activate(); //make sure the form is on front and ready to catch events
+
+			IsOpened = true;
+		}
+
+		/// <summary>
+		/// Close this window
+		/// </summary>
+		public void Close()
+		{
+			form.Close();
+			form.Dispose();
+			IsOpened = false;
+		}
+
+		/// <summary>
+		/// Sets Window's Icon
+		/// </summary>
+		/// <param name="path">path to the icon. Should be an .ico file</param>
+		public void SetIcon(string path)
+		{
+			this.form.Icon = new Icon(path);
+		}
+
+		/// <summary>
+		/// Sets Window's Title
+		/// </summary>
+		/// <param name="text">text to be set as window title</param>
+		public void SetTitle(string text)
+		{
+			this.form.Text = text;
+		}
+
+		/// <summary>
+		/// Sets mouse cursor visibility
+		/// </summary>
+		/// <param name="enabled"><c>true</c> to show mouse, <c>false</c> otherwise</param>
+		public void SetMouseVisible(bool enabled)
+		{
+			if (enabled)
+				Cursor.Show();
+			else
+				Cursor.Hide();
 		}
 
 		/// <summary>
@@ -244,7 +227,36 @@ namespace Aiv.Draw
 			DeltaTime = (float)this.timer.Elapsed.TotalSeconds;
 		}
 
-		private void MouseDown(object sender, MouseEventArgs e)
+		/// <summary>
+		/// This class it's necessary because <c>SetStyle</c> method is <c>protected</c>
+		/// </summary>
+		private class FormAdapter : Form
+		{
+			public FormAdapter(int width, int height, string title)
+			{
+				StartPosition = FormStartPosition.CenterScreen;
+				FormBorderStyle = FormBorderStyle.FixedSingle;
+				MinimizeBox = true;
+				MaximizeBox = false;
+
+				SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+				SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+				SetStyle(ControlStyles.UserPaint, false);
+				SetStyle(ControlStyles.FixedWidth, true);
+				SetStyle(ControlStyles.FixedHeight, true);
+
+				Text = title;
+
+				//Calculate form size taking into account delta
+				//to have a real width x height window
+				Size = new Size(width, height);
+				int deltaW = width - ClientSize.Width;
+				int deltaH = height - ClientSize.Height;
+				Size = new Size(width + deltaW, height + deltaH);
+			}
+		}
+
+		private void MouseDownHandler(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 				MouseLeft = true;
@@ -254,7 +266,7 @@ namespace Aiv.Draw
 				MouseMiddle = true;
 		}
 
-		private void MouseUp(object sender, MouseEventArgs e)
+		private void MouseUpHandler(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 				MouseLeft = false;
@@ -264,17 +276,17 @@ namespace Aiv.Draw
 				MouseMiddle = false;
 		}
 
-		private void Close(object sender, FormClosedEventArgs e)
+		private void CloseHandler(object sender, FormClosedEventArgs e)
 		{
-			this.opened = false;
+			this.IsOpened = false;
 		}
 
-		private void KeyDown(object sender, KeyEventArgs e)
+		private void KeyDownHandler(object sender, KeyEventArgs e)
 		{
 			this.keyboardTable[(KeyCode)e.KeyCode] = true;
 		}
 
-		private void KeyUp(object sender, KeyEventArgs e)
+		private void KeyUpHandler(object sender, KeyEventArgs e)
 		{
 			this.keyboardTable[(KeyCode)e.KeyCode] = false;
 		}
