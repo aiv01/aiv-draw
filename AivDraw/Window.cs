@@ -42,7 +42,7 @@ namespace Aiv.Draw
 
 		private Form form;
 		private PictureBox pbox;
-		private Rectangle rect;
+		private Rectangle workingRect;
 		private Bitmap workingBitmap;
 		
 		private Dictionary<KeyCode, bool> keyboardTable;
@@ -153,8 +153,7 @@ namespace Aiv.Draw
 					throw new Exception("Unsupported PixelFormat");
 			}
 
-			//TODO: Extract class RawBitmap (exposing BlitRGB, BlitRGBA, BlitGrayScale)
-			this.rect = new Rectangle(0, 0, width, height);
+			this.workingRect = new Rectangle(0, 0, width, height);
 			this.workingBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 						
 			this.form.Show(); //make the form visible
@@ -198,6 +197,47 @@ namespace Aiv.Draw
 		/// </summary>
 		public bool MouseMiddle { get; internal set; }
 
+		/// <summary>
+		/// Returns true when <c>key</c> is pressed
+		/// </summary>
+		/// <param name="key">key to check if is pressed</param>
+		public bool GetKey(KeyCode key)
+		{
+			if (!this.keyboardTable.ContainsKey(key))
+				return false;
+			return this.keyboardTable[key];
+		}
+
+		/// <summary>
+		/// Draws the current <c>Window.bitmap</c> into the form
+		/// </summary>
+		public void Blit()
+		{
+			this.timer.Restart();
+
+			switch (this.Format)
+			{
+				case PixelFormat.RGB:
+					this.BlitRGB();
+					break;
+				case PixelFormat.RGBA:
+					this.BlitRGBA();
+					break;
+				case PixelFormat.Grayscale:
+					this.BlitGrayscale();
+					break;
+				default:
+					throw new Exception("Unsupported PixelFormat");
+			}
+
+			// invalidate and update the picturebox
+			this.pbox.Image = this.workingBitmap;
+
+			Application.DoEvents();
+
+			DeltaTime = (float)this.timer.Elapsed.TotalSeconds;
+		}
+
 		private void MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
@@ -235,7 +275,7 @@ namespace Aiv.Draw
 
 		private unsafe void BlitRGB()
 		{
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.workingRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
 			for (int y = 0; y < this.Height; y++)
 			{
@@ -260,7 +300,7 @@ namespace Aiv.Draw
 		private unsafe void BlitRGBA()
 		{
 
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.workingRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
 			for (int y = 0; y < this.Height; y++)
 			{
@@ -285,7 +325,7 @@ namespace Aiv.Draw
 		private unsafe void BlitGrayscale()
 		{
 
-			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
+			System.Drawing.Imaging.BitmapData bdata = this.workingBitmap.LockBits(this.workingRect, System.Drawing.Imaging.ImageLockMode.WriteOnly, this.workingBitmap.PixelFormat);
 			byte* data = (byte*)bdata.Scan0;
 			for (int y = 0; y < this.Height; y++)
 			{
@@ -305,51 +345,6 @@ namespace Aiv.Draw
 			}
 			this.workingBitmap.UnlockBits(bdata);
 
-		}
-
-		/// <summary>
-		/// Returns true when <c>key</c> is pressed
-		/// </summary>
-		/// <param name="key">key to check if is pressed</param>
-		public bool GetKey(KeyCode key)
-		{
-			if (!this.keyboardTable.ContainsKey(key))
-				return false;
-			return this.keyboardTable[key];
-		}
-
-		/// <summary>
-		/// Draws the current <c>Window.bitmap</c> into the form
-		/// </summary>
-		public void Blit()
-		{
-			if (!this.timer.IsRunning)
-				this.timer.Start();
-
-			switch (this.Format)
-			{
-				case PixelFormat.RGB:
-					this.BlitRGB();
-					break;
-				case PixelFormat.RGBA:
-					this.BlitRGBA();
-					break;
-				case PixelFormat.Grayscale:
-					this.BlitGrayscale();
-					break;
-				default:
-					throw new Exception("Unsupported PixelFormat");
-			}
-
-			// this invalidates the picturebox
-			this.pbox.Image = this.workingBitmap;
-
-			Application.DoEvents();
-
-			DeltaTime = (float)this.timer.Elapsed.TotalSeconds;
-
-			this.timer.Reset();
-			this.timer.Start();
 		}
 
 	}

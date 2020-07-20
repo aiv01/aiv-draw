@@ -58,7 +58,8 @@ namespace Example
 
             while (win.opened)
             {
-                Console.WriteLine("Looping ...");
+                //Console.WriteLine("Looping ...");
+                Console.WriteLine(win.DeltaTime);
                 win.Blit();
             }
         }
