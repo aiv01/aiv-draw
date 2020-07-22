@@ -2,17 +2,22 @@ language: csharp
 solution: AivDraw.sln
 notifications:
   email: false
-install:
+before_install:
+  - apt-get install nunit-console
+before_script: #install:
   - nuget restore AivDraw.sln
 script:
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
+after_script:
+  - ls -l AivDraw/bin/x64/Release/*.dll
+  - nunit-console Tests/bin/Release/Tests.dll
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
             && nuget push ./Aiv.Draw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
             && mv *.nupkg artifacts
-            && mv AivDraw/bin/Release/*.dll artifacts
+            && mv AivDraw/bin/x64/Release/*.dll artifacts
     on:
       repo: aiv01/aiv-draw
       tags: true
