@@ -3,7 +3,7 @@ solution: AivDraw.sln
 notifications:
   email: false
 before_install:
-  - apt-get install nunit-console
+  - sudo apt-get install nunit-console
 before_script: #install:
   - nuget restore AivDraw.sln
 script:
