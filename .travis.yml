@@ -10,7 +10,7 @@ script:
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
 after_script:
   - ls -l AivDraw/bin/x64/Release/*.dll
-  - nunit-console Tests/bin/Release/Tests.dll
+  - nunit-console Tests/bin/x64/Release/Tests.dll
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
