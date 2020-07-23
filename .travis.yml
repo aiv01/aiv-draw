@@ -16,8 +16,12 @@ script:
     && echo "PACKAGING"
   # DOCS
   #- doxygen
-  - sed -i "s/@AUTO_TAG/0.8.0/" ./AivDraw.nuspec
-  - sed -i "s/@AUTO_YEAR/2020/" ./AivDraw.nuspec
+  - AUTO_YEAR=$(date +%Y)
+  - echo $AUTO_YEAR
+  - AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi)
+  - echo $AUTO_TAG
+  - sed -i "s/@AUTO_TAG/$AUTO_TAG/" ./AivDraw.nuspec
+  - sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
   - cat ./AivDraw.nuspec
 deploy:
   - provider: script
