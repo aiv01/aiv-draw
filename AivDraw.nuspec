@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Aiv.Draw</id>
-    <version>0.7.0</version>
-    <authors>Aiv S.r.l., Roberto De Ioris</authors>
-    <owners>Aiv S.r.l., Roberto De Ioris</owners>
+    <version>0.8.0</version>
+    <authors>Aiv S.r.l.</authors>
+    <owners>Aiv S.r.l.</owners>
     <licenseUrl>https://github.com/aiv01/aiv-draw/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/aiv01/aiv-draw</projectUrl>
     <iconUrl>https://avatars2.githubusercontent.com/u/15378741</iconUrl>
