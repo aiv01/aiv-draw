@@ -18,6 +18,7 @@ script:
   # PACKAGING
   - sed -i "s/@AUTO_TAG/$AUTO_TAG/" ./AivDraw.nuspec
   - sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
+  - cat ./AivDraw.nuspec
   - nuget pack ./AivDraw.nuspec -Verbosity detailed
   # DOCS
   - doxygen
