@@ -2,15 +2,18 @@ language: csharp
 solution: AivDraw.sln
 notifications:
   email: false
-branches:
-  except: gh-pages
 install:
   - nuget restore AivDraw.sln
   - sudo apt-get install doxygen
 script:
+  # BUILD
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
   - ls -l AivDraw/bin/x64/Release/*.dll
+  # TESTS
   - packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
+  # PACKAGING
+  - echo "NUGET\n" && echo "PACKAGING"
+  # DOCS
   - doxygen
 deploy:
   - provider: script
@@ -28,7 +31,8 @@ deploy:
     github_token: $GITHUB_API_KEY
     local_dir: auto-docs/html
     on:
-        branch: issue-6-Automate_ApiDoc_generation
+      #branch: issue-6-Automate_ApiDoc_generation
+      tags: true
     skip_cleanup: true
     
   - provider: releases
