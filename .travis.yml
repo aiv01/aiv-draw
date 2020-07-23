@@ -5,6 +5,10 @@ notifications:
 install:
   - nuget restore AivDraw.sln
   - sudo apt-get install doxygen
+  
+before_script:
+  - AUTO_YEAR=$(date +%Y)
+  - AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi) 
 script:
   # BUILD
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
@@ -12,17 +16,12 @@ script:
   # TESTS
   - packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
   # PACKAGING
-  - echo "NUGET\n" 
-    && echo "PACKAGING"
-  # DOCS
-  #- doxygen
-  - AUTO_YEAR=$(date +%Y)
-  - echo $AUTO_YEAR
-  - AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi)
-  - echo $AUTO_TAG
   - sed -i "s/@AUTO_TAG/$AUTO_TAG/" ./AivDraw.nuspec
   - sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
-  - cat ./AivDraw.nuspec
+  - nuget pack ./AivDraw.nuspec -Verbosity detailed
+  # DOCS
+  - doxygen
+ 
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
@@ -39,8 +38,8 @@ deploy:
     github_token: $GITHUB_API_KEY
     local_dir: auto-docs/html
     on:
-      #branch: issue-6-Automate_ApiDoc_generation
-      tags: true
+      branch: issue-6-Automate_ApiDoc_generation
+      #tags: true
     skip_cleanup: true
     
   - provider: releases
