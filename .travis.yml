@@ -2,15 +2,14 @@ language: csharp
 solution: AivDraw.sln
 notifications:
   email: false
-before_install:
-  - sudo apt-get install nunit-console
-before_script: #install:
+install:
   - nuget restore AivDraw.sln
 script:
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
-after_script:
   - ls -l AivDraw/bin/x64/Release/*.dll
-  - nunit3-console Tests/bin/x64/Release/Tests.dll
+  - packages\NUnit.ConsoleRunner.3.*\
+  - ls -l packages\NUnit.ConsoleRunner.3.*\tools\
+  - packages\NUnit.ConsoleRunner.3.*\tools\nunit3-console Tests/bin/x64/Release/Tests.dll
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
