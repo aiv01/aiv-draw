@@ -12,9 +12,13 @@ script:
   # TESTS
   - packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
   # PACKAGING
-  - echo "NUGET\n" && echo "PACKAGING"
+  - echo "NUGET\n" 
+    && echo "PACKAGING"
   # DOCS
-  - doxygen
+  #- doxygen
+  - sed -i "s/@AUTO_TAG/0.8.0/" ./AivDraw.nuspec
+  - sed -i "s/@AUTO_YEAR/2020/" ./AivDraw.nuspec
+  - cat ./AivDraw.nuspec
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
