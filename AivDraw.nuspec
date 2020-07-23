@@ -17,6 +17,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="AivDraw/bin/Release/AivDraw.dll" target="lib/net40" />
+    <file src="AivDraw/bin/x64/Release/AivDraw.dll" target="lib/net40" />
   </files>
 </package>
