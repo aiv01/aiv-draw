@@ -4,10 +4,13 @@ notifications:
   email: false
 install:
   - nuget restore AivDraw.sln
+  - sudo apt-get install doxygen
 script:
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
   - ls -l AivDraw/bin/x64/Release/*.dll
   - packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
+  - doxygen
+  - ls -l docs/html
 deploy:
   - provider: script
     script: nuget pack ./AivDraw.nuspec -Verbosity detailed
