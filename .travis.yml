@@ -7,8 +7,8 @@ install:
   - sudo apt-get install doxygen
   
 before_script:
-  - AUTO_YEAR=$(date +%Y)
-  - AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi) 
+  - export AUTO_YEAR=$(date +%Y)
+  - export AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi) 
 script:
   # BUILD
   - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
