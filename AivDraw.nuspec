@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Aiv.Draw</id>
-    <version>0.8.0</version>
+    <version>@AUTO_TAG</version>
     <authors>Aiv S.r.l.</authors>
     <owners>Aiv S.r.l.</owners>
     <licenseUrl>https://github.com/aiv01/aiv-draw/blob/master/LICENSE</licenseUrl>
@@ -10,13 +10,13 @@
     <iconUrl>https://avatars2.githubusercontent.com/u/15378741</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Framebuffer-based 2d drawing library</description>
-    <releaseNotes>Updated Copyright</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <!--releaseNotes>Updated Copyright</releaseNotes-->
+    <copyright>Copyright @AUTO_YEAR</copyright>
     <tags>aiv gaming 2d drawing</tags>
     <dependencies>
     </dependencies>
   </metadata>
   <files>
-    <file src="AivDraw/bin/Release/AivDraw.dll" target="lib/net40" />
+    <file src="AivDraw/bin/x64/Release/AivDraw.dll" target="lib/net48" />
   </files>
 </package>
