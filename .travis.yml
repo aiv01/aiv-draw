@@ -10,23 +10,24 @@ before_script:
   - export AUTO_YEAR=$(date +%Y)
   - export AUTO_TAG=$(if [ -z "$TRAVIS_TAG" ]; then echo "0.0.0"; else echo $TRAVIS_TAG; fi) 
 script:
-  # BUILD
-  - msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
-  - ls -l AivDraw/bin/x64/Release/*.dll
-  # TESTS
-  - packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
-  # PACKAGING
-  - sed -i "s/@AUTO_TAG/$AUTO_TAG/" ./AivDraw.nuspec
-  - sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
-  - cat ./AivDraw.nuspec
-  - nuget pack ./AivDraw.nuspec -Verbosity detailed
+  - echo "=== BUILD ===\n" 
+    && msbuild /p:Configuration=Release /p:Platform=x64 AivDraw.sln
+    && ls -l AivDraw/bin/x64/Release/*.dll
+  - echo "=== TEST ===\n"
+    && packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe Tests/bin/x64/Release/Tests.dll
+  - echo "=== PACKAGE ===\n" 
+    && sed -i "s/@AUTO_TAG/$AUTO_TAG/" ./AivDraw.nuspec
+    && sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
+    && cat ./AivDraw.nuspec
+    && nuget pack ./AivDraw.nuspec -Verbosity detailed
   # DOCS
-  - doxygen
+  - "=== DOCUMENTATION ===\n" 
+    && doxygen
  
 deploy:
   - provider: script
-    script: nuget pack ./AivDraw.nuspec -Verbosity detailed
-            && nuget push ./Aiv.Draw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
+    script: #nuget pack ./AivDraw.nuspec -Verbosity detailed
+            nuget push ./Aiv.Draw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
             && mv *.nupkg artifacts
             && mv AivDraw/bin/x64/Release/*.dll artifacts
