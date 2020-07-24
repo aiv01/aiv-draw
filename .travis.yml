@@ -20,10 +20,10 @@ script:
     && sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
     && cat ./AivDraw.nuspec
     && nuget pack ./AivDraw.nuspec -Verbosity detailed
-  - "=== DOCUMENTATION ===\n" 
+  - echo "=== DOCUMENTATION ===\n" 
     && doxygen
     && zip -r docs.zip auto-docs/html
-  - "=== ARTIFACTS ===\n"
+  - echo "=== ARTIFACTS ===\n"
     && mkdir artifacts
     && mv *.nupkg artifacts/
     && mv AivDraw/bin/x64/Release/*.dll artifacts/
