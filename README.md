@@ -29,7 +29,7 @@ namespace DrawTest
 ```
 
 # Documentation
-API documentation related to the last version of the library is published (here)[http://aiv01.github.io/aiv-draw/].
+API documentation related to the last version of the library is published [here](http://aiv01.github.io/aiv-draw/).
 
 # Compliance
 Library tested on:
