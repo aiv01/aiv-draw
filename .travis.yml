@@ -20,13 +20,19 @@ script:
     && sed -i "s/@AUTO_YEAR/$AUTO_YEAR/" ./AivDraw.nuspec
     && cat ./AivDraw.nuspec
     && nuget pack ./AivDraw.nuspec -Verbosity detailed
-  # DOCS
   - "=== DOCUMENTATION ===\n" 
     && doxygen
+    && zip -r docs.zip auto-docs/html
+  - "=== ARTIFACTS ===\n"
+    && mkdir artifacts
+    && mv *.nupkg artifacts/
+    && mv AivDraw/bin/x64/Release/*.dll artifacts/
+    && mv docs.zip artifacts/
+    && ls -l artifacts/
  
 deploy:
   - provider: script
-    script: #nuget pack ./AivDraw.nuspec -Verbosity detailed
+    script: nuget pack ./AivDraw.nuspec -Verbosity detailed
             nuget push ./Aiv.Draw.*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
             && mkdir artifacts
             && mv *.nupkg artifacts
