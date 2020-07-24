@@ -1,10 +1,11 @@
 language: csharp
 solution: AivDraw.sln
 notifications:
-  email: false
-#install:
-#  - nuget restore AivDraw.sln
-#  - sudo apt-get install doxygen
+  #email: false
+  email:
+    if: branch = master
+    on_success: true
+    on_failure: true
 before_script:
   - export AUTO_PATH_SLN=AivDraw.sln
   - export AUTO_PATH_LIBR_DLL=AivDraw/bin/x64/Release/AivDraw.dll
@@ -36,13 +37,11 @@ script:
     && cp *.nupkg             $AUTO_PATH_ARTIFACTS
     && cp $AUTO_PATH_LIBR_DLL $AUTO_PATH_ARTIFACTS
     && mv docs.zip            $AUTO_PATH_ARTIFACTS
-    && ls -l $AUTO_PATH_ARTIFACTS
- 
+    && ls -l $AUTO_PATH_ARTIFACTS 
 deploy:
   - provider: script
     script: nuget push ./*.nupkg -Verbosity detailed -ApiKey $NUGET_API_KEY -Source $NUGET_SOURCE
     on:
-      repo: aiv01/aiv-draw
       tags: true
     skip_cleanup: true
     
@@ -50,8 +49,7 @@ deploy:
     github_token: $GITHUB_API_KEY
     local_dir: $AUTO_PATH_DOCS
     on:
-      branch: issue-6-Automate_ApiDoc_generation
-      #tags: true
+      tags: true
     skip_cleanup: true
     
   - provider: releases
@@ -59,6 +57,5 @@ deploy:
     file_glob: true
     file: $AUTO_PATH_ARTIFACTS/*
     on:
-      repo: aiv01/aiv-draw
       tags: true
     skip_cleanup: true
