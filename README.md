@@ -35,7 +35,7 @@ API documentation related to the last version of the library is published [here]
 Library tested on:
 * Visual Studio 2019 v16.6.4
 * .NET Framework 4.8
-* x64 architecture
+* Any Cpu architecture
 
 # Contribution
 If you want to contribute to the project, please follow the [guidelines](CONTRIBUTING.md).

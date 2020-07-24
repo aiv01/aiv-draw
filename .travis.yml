@@ -8,8 +8,8 @@ notifications:
     on_failure: true
 before_script:
   - export AUTO_PATH_SLN=AivDraw.sln
-  - export AUTO_PATH_LIBR_DLL=AivDraw/bin/x64/Release/AivDraw.dll
-  - export AUTO_PATH_TEST_DLL=Tests/bin/x64/Release/Tests.dll
+  - export AUTO_PATH_LIBR_DLL=AivDraw/bin/Release/AivDraw.dll
+  - export AUTO_PATH_TEST_DLL=Tests/bin/Release/Tests.dll
   - export AUTO_PATH_NUSPEC=AivDraw.nuspec
   - export AUTO_PATH_DOCS=auto-docs/html
   - export AUTO_PATH_ARTIFACTS=artifacts
@@ -20,7 +20,7 @@ script:
     && nuget restore $AUTO_PATH_SLN
     && sudo apt-get install doxygen
   - echo "=== BUILD ===" 
-    && msbuild /p:Configuration=Release /p:Platform=x64 $AUTO_PATH_SLN
+    && msbuild /p:Configuration=Release $AUTO_PATH_SLN
     && ls -l $AUTO_PATH_LIBR_DLL
   - echo "=== TEST ==="
     && packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe $AUTO_PATH_TEST_DLL
