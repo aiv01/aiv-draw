@@ -6,10 +6,10 @@ notifications:
     if: branch = master
     on_success: true
     on_failure: true
-branches:
+tags:
   except:    
+    #- /^\d+(\.\d+){2,3}$/
     - prova
-    
 before_script:
   - export AUTO_PATH_SLN=AivDraw.sln
   - export AUTO_PATH_LIBR_DLL=AivDraw/bin/Release/AivDraw.dll
