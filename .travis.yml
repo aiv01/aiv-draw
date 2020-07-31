@@ -40,7 +40,6 @@ script:
   - echo "=== ARTIFACTS ==="
     && mkdir $AUTO_PATH_ARTIFACTS
     && cp *.nupkg             $AUTO_PATH_ARTIFACTS
-    #&& cp $AUTO_PATH_LIBR_DLL $AUTO_PATH_ARTIFACTS
     && mv docs.zip            $AUTO_PATH_ARTIFACTS
     && ls -l $AUTO_PATH_ARTIFACTS 
 deploy:
