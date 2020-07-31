@@ -1,5 +1,13 @@
-# aiv-draw
-Simple wrapper for teaching computer graphics principles to AIV first year students
+# aiv-draw &middot; [![Nuget Version](https://img.shields.io/nuget/v/Aiv.Draw?color=blue)](https://www.nuget.org/packages/Aiv.Draw) [![Nuget Downloads](https://img.shields.io/nuget/dt/Aiv.Draw?color=yellow)](https://www.nuget.org/packages/Aiv.Draw) [![Api Doc](https://img.shields.io/badge/api--doc-read-blue)](http://aiv01.github.io/aiv-draw/) [![Build Status](https://travis-ci.org/aiv01/aiv-draw.svg?branch=master)](https://travis-ci.org/aiv01/aiv-draw) 
+
+
+Simple wrapper for teaching computer graphics principles to AIV first year students.
+
+Main features:
+* Window wrapping
+* Window bitmap format management (Black & White, Gray scale, RGB and RGBA)
+* Input management (Mouse and Keyboard)
+* Image loading (in RGB and RGBA format)
 
 # Example
 Below a very basic usage example.
