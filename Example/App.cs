@@ -22,10 +22,11 @@ namespace Example
             Console.WriteLine("[6] Drawing Sprite");
             Console.WriteLine("[7] Misc features");
             Console.WriteLine("[8] Black & White");
+            Console.WriteLine("[9] Handling Focus");
             Console.WriteLine();
 
             int minChoice = 1;
-            int maxChoice = 8;
+            int maxChoice = 9;
             int choice;
             do
             {
@@ -50,8 +51,8 @@ namespace Example
                 case 6: Example06_DrawingSprite(); break;
                 case 7: Example07_MiscFeatures(); break;
                 case 8: Example08_BlackAndWhite(); break;
+                case 9: Example09_HandlingFocus(); break;
             }
-
         }
 
         private static void Example01_BasicLoop()
@@ -204,6 +205,22 @@ namespace Example
                 {
                     win.Bitmap[i] = 1;
                 }
+                win.Blit();
+            }
+        }
+
+        private static void Example09_HandlingFocus()
+        {
+            Window win = new Window(800, 600, "AivDraw Focus Test", PixelFormat.RGB);
+
+            int count = 0;
+
+            while (win.IsOpened)
+            {
+                //Loosing focus, key status is reset so no more KeyPressed message are shown
+                if (win.GetKey(KeyCode.A)) Console.WriteLine("KeyPressed: " + ++count);
+                if (win.HasFocus) Console.WriteLine("Focused: " + ++count);
+
                 win.Blit();
             }
         }

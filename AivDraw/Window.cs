@@ -40,6 +40,11 @@ namespace Aiv.Draw
 		/// </summary>
 		public bool IsOpened { get; internal set; }
 
+		/// <summary>
+		/// Check if window has focus;
+		/// </summary>
+		public bool HasFocus { get; internal set; }
+
 		private Form form;
 		private PictureBox pbox;
 		private Rectangle workingRect;
@@ -75,6 +80,8 @@ namespace Aiv.Draw
 			this.pbox.MouseUp += new MouseEventHandler(this.MouseUpHandler);
 			this.pbox.MouseDown += new MouseEventHandler(this.MouseDownHandler);
 			this.form.Controls.Add(this.pbox);
+			this.form.GotFocus += new EventHandler(this.GainFocusHandler);
+			this.form.LostFocus += new EventHandler(this.LostFocusHandler);
 
 			switch (format)
 			{
@@ -106,10 +113,10 @@ namespace Aiv.Draw
 			IsOpened = true;
 		}
 
-		/// <summary>
-		/// Close this window
-		/// </summary>
-		public void Close()
+        /// <summary>
+        /// Close this window
+        /// </summary>
+        public void Close()
 		{
 			form.Close();
 			form.Dispose();
@@ -289,6 +296,21 @@ namespace Aiv.Draw
 		private void KeyUpHandler(object sender, KeyEventArgs e)
 		{
 			this.keyboardTable[(KeyCode)e.KeyCode] = false;
+		}
+
+		private void GainFocusHandler(object sender, EventArgs e)
+		{
+			HasFocus = true;
+		}
+
+		private void LostFocusHandler(object sender, EventArgs e)
+		{
+			HasFocus = false;
+			//Clear Input state when window loose focus
+			this.keyboardTable.Clear();
+			MouseLeft = false;
+			MouseRight = false;
+			MouseMiddle = false;
 		}
 
 		private unsafe void BlitRGB()
