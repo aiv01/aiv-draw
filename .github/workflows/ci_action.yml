@@ -32,4 +32,4 @@ jobs:
             msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
             dir ${{env.AUTO_PATH_LIBR_DLL}}
         - name: Test
-          run: packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
+          run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
