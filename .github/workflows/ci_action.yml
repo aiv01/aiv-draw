@@ -16,7 +16,7 @@ jobs:
         BUILD_DIR: ${{ github.workspace }}${{ matrix.SEP }}build
         AUTO_PATH_SLN: AivDraw.sln
         AUTO_PATH_LIBR_DLL: AivDraw/bin/Release/AivDraw.dll
-
+        AUTO_PATH_TEST_DLL: Tests/bin/Release/Tests.dll
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
@@ -31,4 +31,5 @@ jobs:
             nuget restore ${{env.AUTO_PATH_SLN}}
             msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
             dir ${{env.AUTO_PATH_LIBR_DLL}}
-            
+        - name: Test
+          run: packages/NUnit.ConsoleRunner.3.*/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
