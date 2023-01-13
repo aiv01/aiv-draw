@@ -206,8 +206,6 @@ namespace Aiv.Draw
 		/// </summary>
 		public void Blit()
 		{
-			this.timer.Restart();
-
 			switch (this.Format)
 			{
 				case PixelFormat.RGB:
@@ -232,6 +230,7 @@ namespace Aiv.Draw
 			Application.DoEvents();
 
 			DeltaTime = (float)this.timer.Elapsed.TotalSeconds;
+			this.timer.Restart();
 		}
 
 		/// <summary>
