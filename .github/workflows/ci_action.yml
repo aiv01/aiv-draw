@@ -17,6 +17,8 @@ jobs:
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
+          with:
+            msbuild-architecture: x64
         - name: Checkout
           uses: actions/checkout@v2
         - name: List Workspace
@@ -24,4 +26,5 @@ jobs:
         - name: Compile
           run: |
             msbuild -version
+            nuget help
             
