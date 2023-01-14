@@ -15,8 +15,8 @@ jobs:
       env:
         BUILD_DIR: ${{ github.workspace }}${{ matrix.SEP }}build
         AUTO_PATH_SLN: AivDraw.sln
-        AUTO_PATH_LIBR_DLL: AivDraw/bin/Release/AivDraw.dll
-        AUTO_PATH_TEST_DLL: Tests/bin/Release/Tests.dll
+        AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
+        AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
@@ -33,3 +33,7 @@ jobs:
             dir ${{env.AUTO_PATH_LIBR_DLL}}
         - name: Test
           run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
+        - name: Prova
+          run: |
+            $year=Get-Date -Format "yyyy"
+            echo "Current Year: $year"
