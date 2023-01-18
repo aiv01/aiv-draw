@@ -15,6 +15,7 @@ jobs:
       env:
         BUILD_DIR: ${{ github.workspace }}${{ matrix.SEP }}build
         AUTO_PATH_SLN: AivDraw.sln
+        AUTO_PATH_NUSPEC: AivDraw.nuspec
         AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
         AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
         AUTO_PATH_DOCS: auto-docs\html
@@ -35,10 +36,11 @@ jobs:
             dir ${{env.AUTO_PATH_LIBR_DLL}}
         - name: Test
           run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
-        - name: Prova
+        - name: Package
           run: |
             $year=Get-Date -Format "yyyy"
-            echo "Current Year: $year"
+            (Get-Content $AUTO_PATH_NUSPEC -raw) -replace '@AUTO_YEAR', $year | Set-Content $AUTO_PATH_NUSPEC
+            Get-Content $AUTO_PATH_NUSPEC -raw
         - name: Documentation
           run: |
             choco install doxygen.install
