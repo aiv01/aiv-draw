@@ -11,24 +11,33 @@ on:
 jobs:
   build:
       name: Build Job
-      runs-on: ubuntu-latest
+      runs-on: windows-2019
       env:
         BUILD_DIR: ${{ github.workspace }}${{ matrix.SEP }}build
         AUTO_PATH_SLN: AivDraw.sln
-        AUTO_PATH_LIBR_DLL: AivDraw/bin/Release/AivDraw.dll
-        AUTO_PATH_TEST_DLL: Tests/bin/Release/Tests.dll
+        AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
+        AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
       steps:
+        - name: Add msbuild to PATH
+          uses: microsoft/setup-msbuild@v1.1
+          with:
+            msbuild-architecture: x64
         - name: Checkout
           uses: actions/checkout@v2
         - name: List Workspace
-          run: ls -l ${{ github.workspace }}
+          run: dir ${{ github.workspace }}
         - name: Compile
           run: |
-            dotnet restore ${{env.AUTO_PATH_SLN}}
-            dotnet msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
+            nuget restore ${{env.AUTO_PATH_SLN}}
+            msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
             dir ${{env.AUTO_PATH_LIBR_DLL}}
         - name: Test
           run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
-        - name: Documentation
-          uses: mattnotmitt/doxygen-action@v1.9.5
+        - name: Prova
+          run: |
+            $year=Get-Date -Format "yyyy"
+            echo "Current Year: $year"
+        - name: Setup Doxy
+          run: |
+            choco install doxygen.install
           
