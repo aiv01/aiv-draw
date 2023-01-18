@@ -40,9 +40,9 @@ jobs:
         - name: Setup Doxy
           run: |
             choco install doxygen.install
-            dir "C:\Program Files\doxygen"
+            dir "C:\Program Files\doxygen\bin"
             echo "REFRESH"
             refreshenv
-            echo $env:path
+            echo %PATH%
             doxygen --help
           
