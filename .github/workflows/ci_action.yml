@@ -37,3 +37,6 @@ jobs:
           run: |
             $year=Get-Date -Format "yyyy"
             echo "Current Year: $year"
+        - name: Documentation
+          uses: mattnotmitt/doxygen-action@v1.9.5
+          
