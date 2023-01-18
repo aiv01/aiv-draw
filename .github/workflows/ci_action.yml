@@ -40,4 +40,5 @@ jobs:
         - name: Setup Doxy
           run: |
             choco install doxygen.install
+            doxygen --version
           
