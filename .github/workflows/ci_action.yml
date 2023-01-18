@@ -24,7 +24,7 @@ jobs:
           run: ls -l ${{ github.workspace }}
         - name: Compile
           run: |
-            dotnet nuget restore ${{env.AUTO_PATH_SLN}}
+            dotnet restore ${{env.AUTO_PATH_SLN}}
             dotnet msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
             dir ${{env.AUTO_PATH_LIBR_DLL}}
         - name: Test
