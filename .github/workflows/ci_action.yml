@@ -40,6 +40,8 @@ jobs:
         - name: Setup Doxy
           run: |
             choco install doxygen.install
+            echo "REFRESH"
             refreshenv
-            doxygen --version
+            echo $env:path
+            doxygen --help
           
