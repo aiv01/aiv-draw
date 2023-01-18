@@ -17,6 +17,8 @@ jobs:
         AUTO_PATH_SLN: AivDraw.sln
         AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
         AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
+        AUTO_PATH_DOCS: auto-docs\html
+        AUTO_PATH_ARTIFACTS: artifacts
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
@@ -37,10 +39,16 @@ jobs:
           run: |
             $year=Get-Date -Format "yyyy"
             echo "Current Year: $year"
-        - name: Setup Doxy
+        - name: Documentation
           run: |
             choco install doxygen.install
             $Env:PATH += ";C:\Program Files\doxygen\bin"
             doxygen
-            dir ${{ github.workspace }}
+            Compress-Archive -Path $AUTO_PATH_DOCS -DestinationPath docs.zip
+        - name: Artifacts
+          run: |
+            cp *.nuget  $AUTO_PATH_ARTIFACTS
+            cp docs.zip $AUTO_PATH_ARTIFACTS
+            
+            
           
