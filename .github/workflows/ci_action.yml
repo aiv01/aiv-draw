@@ -39,18 +39,18 @@ jobs:
         - name: Package
           run: |
             $year=Get-Date -Format "yyyy"
-            (Get-Content $AUTO_PATH_NUSPEC -raw) -replace '@AUTO_YEAR', $year | Set-Content $AUTO_PATH_NUSPEC
-            Get-Content $AUTO_PATH_NUSPEC -raw
+            (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_YEAR', $year | Set-Content ${{env.AUTO_PATH_NUSPEC}}
+            Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
         - name: Documentation
           run: |
             choco install doxygen.install
             $Env:PATH += ";C:\Program Files\doxygen\bin"
             doxygen
-            Compress-Archive -Path $AUTO_PATH_DOCS -DestinationPath docs.zip
+            Compress-Archive -Path ${{env.AUTO_PATH_DOCS}} -DestinationPath docs.zip
         - name: Artifacts
           run: |
-            cp *.nuget  $AUTO_PATH_ARTIFACTS
-            cp docs.zip $AUTO_PATH_ARTIFACTS
+            cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
+            cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
             
             
           
