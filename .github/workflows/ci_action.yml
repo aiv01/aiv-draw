@@ -21,7 +21,7 @@ jobs:
         AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
         AUTO_PATH_DOCS: auto-docs\html
         AUTO_PATH_ARTIFACTS: artifacts
-        AUTO_TAG:  "${{ GITHUB_REF_TYPE	 == 'branch' && GITHUB_REF_NAME || '0.0.0' }}"
+        AUTO_TAG:  "${{ env.GITHUB_REF_TYPE	 == 'branch' && GITHUB_REF_NAME || '0.0.0' }}"
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
