@@ -1,0 +1,21 @@
+name: CI Action New
+
+on:
+  push:
+      branches: 
+        - '**'
+        - '!master'
+  pull_request:
+      branches:
+        - '**'
+        
+jobs:
+  caller-build:
+    uses: ./.github/workflows/build.yml
+  job2:
+    needs: caller-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: ls -l 
+   
