@@ -1,0 +1,14 @@
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: List Workspace
+         run: dir ${{ github.workspace }}
+      - name: Store
+         run: |
+          touch myfile.txt
