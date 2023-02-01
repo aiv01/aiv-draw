@@ -29,8 +29,8 @@ jobs:
             msbuild-architecture: x64
         - name: Prepare env
           run: |
-            if ( ${ GITHUB_REF_TYPE } = 'branch' ) { 
-              echo "AUTO_TAG=${ GITHUB_REF_NAME }" 
+            if ( $GITHUB_REF_TYPE = 'branch' ) { 
+              echo "AUTO_TAG=$GITHUB_REF_NAME" 
             }
         - name: Checkout
           uses: actions/checkout@v2
@@ -65,5 +65,5 @@ jobs:
     steps:
       - name: Debug
         run: |
-          echo "TAG: ${{ env.AUTO_TAG }}
+          echo "TAG: ${{ env.AUTO_TAG }}"
           
