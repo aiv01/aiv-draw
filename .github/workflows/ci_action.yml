@@ -22,15 +22,23 @@ jobs:
         AUTO_PATH_DOCS: auto-docs\html
         AUTO_PATH_ARTIFACTS: artifacts
       outputs:
-        tag: ${{ steps.step1.outputs.tag }}
-      
+        version: ${{ steps.step1.outputs.version }}
+        deploy: ${{ steps.step1.outputs.deploy }}
       steps:
         - name: Prepare env
           id: step1
           run: |
-            if ( $GITHUB_REF_TYPE = 'branch' ) { 
-              echo "tag=${{ github.ref_name }}" >>  $env:GITHUB_OUTPUT
+            $ver_selected='0.0.0'
+            $do_deploy='false'
+            if ( $GITHUB_REF_TYPE = 'tag' ) { 
+              $ver_selected=${{ github.ref_name }}
+              $ver_selected=$tag_selected.Substring(1) 
+              $do_deploy='true'
             }
+            echo "Selected Version: $ver_selected"
+            echo "Selected Deploy: $do_deploy"
+            echo "version=$ver_selected >> $env:GITHUB_OUTPUT
+            echo "deploy=$do_deploy >> $env:GITHUB_OUTPUT
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
           with:
@@ -66,8 +74,9 @@ jobs:
     runs-on: windows-2019
     name: Deploy Job
     needs: [build]
+    if: needs.build.outputs.deploy == 'true'
     steps:
       - name: Debug
         run: |
-          echo "TAG: ${{ needs.build.outputs.tag }}"
+          echo "VERSION: ${{ needs.build.outputs.version }}"
           
