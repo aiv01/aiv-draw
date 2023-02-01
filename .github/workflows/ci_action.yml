@@ -37,8 +37,8 @@ jobs:
             }
             echo "Selected Version: $ver_selected"
             echo "Selected Deploy: $do_deploy"
-            echo "version=$ver_selected >> $env:GITHUB_OUTPUT
-            echo "deploy=$do_deploy >> $env:GITHUB_OUTPUT
+            echo "version=$ver_selected" >> $env:GITHUB_OUTPUT
+            echo "deploy=$do_deploy" >> $env:GITHUB_OUTPUT
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
           with:
