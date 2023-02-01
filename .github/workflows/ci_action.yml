@@ -32,7 +32,7 @@ jobs:
             $do_deploy='false'
             if ( '$GITHUB_REF_TYPE' -eq 'branch' ) { 
               $ver_selected='${{ github.ref_name }}'
-              $ver_selected=$tag_selected.Substring(1) 
+              $ver_selected=$ver_selected.Substring(1) 
               $do_deploy='true'
             }
             echo "Selected Version: $ver_selected"
