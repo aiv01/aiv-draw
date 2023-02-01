@@ -30,11 +30,13 @@ jobs:
           run: |
             $ver_selected='0.0.0'
             $do_deploy='false'
-            if ( '$GITHUB_REF_TYPE' -eq 'branch' ) { 
+            $prova='$env:GITHUB_REF_TYPE'
+            if ( $prova -eq 'branch' ) { 
               $ver_selected='${{ github.ref_name }}'
               $ver_selected=$ver_selected.Substring(1) 
               $do_deploy='true'
             }
+            echo "RefType: $prova"
             echo "Selected Version: $ver_selected"
             echo "Selected Deploy: $do_deploy"
             echo "version=$ver_selected" >> $env:GITHUB_OUTPUT
