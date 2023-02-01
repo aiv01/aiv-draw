@@ -30,7 +30,7 @@ jobs:
         - name: Prepare env
           run: |
             if ( $GITHUB_REF_TYPE = 'branch' ) { 
-              echo "AUTO_TAG=${{ github.ref_name }}" 
+              echo "AUTO_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
             }
         - name: Checkout
           uses: actions/checkout@v2
@@ -58,6 +58,8 @@ jobs:
           run: |
             cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
+        - name: Debug
+          run: echo ${{ env.AUTO_TAG }}
   deploy:
     runs-on: windows-2019
     name: Deploy Job
