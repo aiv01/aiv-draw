@@ -35,7 +35,6 @@ jobs:
               $ver_selected=$ver_selected.Substring(1) 
               $do_deploy='true'
             }
-            echo "RefType: $prova"
             echo "Selected Version: $ver_selected"
             echo "Selected Deploy: $do_deploy"
             echo "version=$ver_selected" >> $env:GITHUB_OUTPUT
