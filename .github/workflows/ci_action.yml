@@ -30,7 +30,7 @@ jobs:
           run: |
             $ver_selected='0.0.0'
             $do_deploy='false'
-            if ( $GITHUB_REF_TYPE = 'tag' ) { 
+            if ( '$GITHUB_REF_TYPE' -eq 'branch' ) { 
               $ver_selected='${{ github.ref_name }}'
               $ver_selected=$tag_selected.Substring(1) 
               $do_deploy='true'
