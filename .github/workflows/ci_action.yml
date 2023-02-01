@@ -31,7 +31,7 @@ jobs:
             $ver_selected='0.0.0'
             $do_deploy='false'
             $prova='$env:GITHUB_REF_TYPE'
-            $prova2=$env:GITHUB_REF_TYPE
+            $prova2='${{ GITHUB_REF_TYPE }}'
             if ( $prova -eq 'branch' ) { 
               $ver_selected='${{ github.ref_name }}'
               $ver_selected=$ver_selected.Substring(1) 
