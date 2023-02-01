@@ -62,8 +62,6 @@ jobs:
           run: |
             cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
-        - name: Debug
-          run: echo ${{ env.AUTO_TAG }}
   deploy:
     runs-on: windows-2019
     name: Deploy Job
