@@ -21,12 +21,17 @@ jobs:
         AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
         AUTO_PATH_DOCS: auto-docs\html
         AUTO_PATH_ARTIFACTS: artifacts
-        AUTO_TAG:  "${{ env.GITHUB_REF_TYPE	 == 'branch' && GITHUB_REF_NAME || '0.0.0'  }}"
+        AUTO_TAG:  '0.0.0'
       steps:
         - name: Add msbuild to PATH
           uses: microsoft/setup-msbuild@v1.1
           with:
             msbuild-architecture: x64
+        - name: Prepare env
+          run: |
+            if ( ${{ env.GITHUB_REF_TYPE }} == 'tag' ) { 
+              echo "AUTO_TAG=${{ env.GITHUB_REF_NAME }}" 
+            }
         - name: Checkout
           uses: actions/checkout@v2
         - name: List Workspace
@@ -53,6 +58,12 @@ jobs:
           run: |
             cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
-            
-            
+  deploy:
+    runs-on: windows-2019
+    name: Deploy Job
+    needs: [build]
+    steps:
+      - name: Debug
+        run: |
+          echo "TAG: ${{ env.AUTO_TAG }}
           
