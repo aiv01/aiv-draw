@@ -65,7 +65,7 @@ jobs:
             Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
             echo "Generate NUGET Package"
             nuget pack ${{env.AUTO_PATH_NUSPEC}} -Verbosity detailed
-            DIR *.nuget
+            DIR *.nupkg
         - name: Documentation
           run: |
             choco install doxygen.install
@@ -76,7 +76,7 @@ jobs:
           
           run: |
             MD ${{env.AUTO_PATH_ARTIFACTS}}
-            CP *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
+            CP *.nupkg  ${{env.AUTO_PATH_ARTIFACTS}}
             CP docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
             DIR ${{env.AUTO_PATH_ARTIFACTS}}
         - name: Archive Artifacts
