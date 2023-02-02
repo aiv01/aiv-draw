@@ -73,7 +73,7 @@ jobs:
             doxygen
             Compress-Archive -Path ${{env.AUTO_PATH_DOCS}} -DestinationPath docs.zip
         - name: Artifacts
-          
+          if: steps.step1.outputs.deploy == 'true'
           run: |
             MD ${{env.AUTO_PATH_ARTIFACTS}}
             CP *.nupkg  ${{env.AUTO_PATH_ARTIFACTS}}
@@ -99,7 +99,9 @@ jobs:
         with:
           name: artifacts
       - name: List workspace
-        run: dir artifacts
+        run: |
+          dir
+          dir artifacts
       - name: Upload release binaries
         uses: svenstaro/upload-release-action@v2
         with:
