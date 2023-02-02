@@ -13,7 +13,6 @@ jobs:
       name: Build Job
       runs-on: windows-2019
       env:
-        BUILD_DIR: ${{ github.workspace }}${{ matrix.SEP }}build
         AUTO_PATH_SLN: AivDraw.sln
         AUTO_PATH_NUSPEC: AivDraw.nuspec
         AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
@@ -64,6 +63,9 @@ jobs:
             $year=Get-Date -Format "yyyy"
             (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_YEAR', $year | Set-Content ${{env.AUTO_PATH_NUSPEC}}
             Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
+            echo "Generate NUGET Package"
+            nuget pack ${{env.AUTO_PATH_NUSPEC}} -Verbosity detailed
+            DIR *.nuget
         - name: Documentation
           run: |
             choco install doxygen.install
@@ -76,7 +78,7 @@ jobs:
             MD ${{env.AUTO_PATH_ARTIFACTS}}
             CP *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             CP docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
-            DIR  ${{env.AUTO_PATH_ARTIFACTS}}
+            DIR ${{env.AUTO_PATH_ARTIFACTS}}
         - name: Archive Artifacts
           if: steps.step1.outputs.deploy == 'true'
           uses: actions/upload-artifact@v3
