@@ -66,10 +66,11 @@ jobs:
             doxygen
             Compress-Archive -Path ${{env.AUTO_PATH_DOCS}} -DestinationPath docs.zip
         - name: Artifacts
-          if: steps.step1.outputs.deploy == 'true'
+          
           run: |
             cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
+            dir  ${{env.AUTO_PATH_ARTIFACTS}}
         - name: Archive Artifacts
           if: steps.step1.outputs.deploy == 'true'
           uses: actions/upload-artifact@v3
