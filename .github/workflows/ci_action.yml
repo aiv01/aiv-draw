@@ -91,6 +91,11 @@ jobs:
           name: artifacts
       - name: List workspace
         run: dir artifacts
+      - name: Open Artifacts
+        run: |
+          Expand-Archive -Path artifacts -DestinationPath open
+          dir 
+          dir open
       - name: Upload release binaries
         uses: svenstaro/upload-release-action@v2
         with:
