@@ -29,7 +29,7 @@ jobs:
           id: step1
           run: |
             $ver_selected='0.0.0'
-            $do_deploy='false'
+            $do_deploy='true'
             if ( '${{ github.ref_type }}' -eq 'branch' ) { 
               $ver_selected='${{ github.ref_name }}'
               $ver_selected=$ver_selected.Substring(1) 
@@ -70,6 +70,11 @@ jobs:
           run: |
             cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
             cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
+        - name: Archive Artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: artifacts
+            path: ${{env.AUTO_PATH_ARTIFACTS}}/*.*
   deploy:
     runs-on: windows-2019
     name: Deploy Job
@@ -79,4 +84,9 @@ jobs:
       - name: Debug
         run: |
           echo "VERSION: ${{ needs.build.outputs.version }}"
-          
+      - name: Restore Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts
+      - name: List workspace
+        run: dir
