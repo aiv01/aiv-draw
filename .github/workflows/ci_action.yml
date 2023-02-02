@@ -1,5 +1,4 @@
 name: CI Action
-
 on:
   push:
       branches: 
