@@ -52,6 +52,7 @@ jobs:
             nuget restore ${{env.AUTO_PATH_SLN}}
             msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
             dir ${{env.AUTO_PATH_LIBR_DLL}}
+            dir
         - name: Test
           run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
         - name: Package
