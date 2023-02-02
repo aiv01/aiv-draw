@@ -57,6 +57,10 @@ jobs:
           run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
         - name: Package
           run: |
+            echo "Set VERSION"
+            $version='${{ steps.step1.outputs.version }}'
+            (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_TAG', $version | Set-Content ${{env.AUTO_PATH_NUSPEC}}
+            echo "Set YEAR"
             $year=Get-Date -Format "yyyy"
             (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_YEAR', $year | Set-Content ${{env.AUTO_PATH_NUSPEC}}
             Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
