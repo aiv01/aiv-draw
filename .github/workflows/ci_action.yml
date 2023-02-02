@@ -68,9 +68,10 @@ jobs:
         - name: Artifacts
           
           run: |
-            cp *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
-            cp docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
-            dir  ${{env.AUTO_PATH_ARTIFACTS}}
+            MD ${{env.AUTO_PATH_ARTIFACTS}}
+            CP *.nuget  ${{env.AUTO_PATH_ARTIFACTS}}
+            CP docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
+            DIR  ${{env.AUTO_PATH_ARTIFACTS}}
         - name: Archive Artifacts
           if: steps.step1.outputs.deploy == 'true'
           uses: actions/upload-artifact@v3
@@ -92,11 +93,6 @@ jobs:
           name: artifacts
       - name: List workspace
         run: dir artifacts
-      - name: Open Artifacts
-        run: |
-          Expand-Archive -Path artifacts -DestinationPath open
-          dir 
-          dir open
       - name: Upload release binaries
         uses: svenstaro/upload-release-action@v2
         with:
