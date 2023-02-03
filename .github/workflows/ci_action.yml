@@ -58,13 +58,13 @@ jobs:
         - name: Package
           run: |
             ECHO "Prepare .nuspec"
-            : # Set VERSION in .nuspec
+            # Set VERSION in .nuspec
             $version='${{ steps.init_step.outputs.version }}'
             (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_TAG', $version | Set-Content ${{env.AUTO_PATH_NUSPEC}}
-            : # Set YEAR in .nuspec
+            # Set YEAR in .nuspec
             $year=Get-Date -Format "yyyy"
             (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_YEAR', $year | Set-Content ${{env.AUTO_PATH_NUSPEC}}
-            : # Print final .nuspec
+            # Print final .nuspec
             Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
             ECHO "Generate NUGET Package"
             nuget pack ${{env.AUTO_PATH_NUSPEC}} -Verbosity detailed
@@ -105,7 +105,7 @@ jobs:
       - name: Prepare Workspace
         run: |
           ls -l artifacts
-          : # docs.zip contains 'html' folder
+          # docs.zip contains 'html' folder
           unzip artifacts/docs.zip
           ls -l
       - name: Upload release binaries
