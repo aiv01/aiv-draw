@@ -86,23 +86,21 @@ jobs:
             name: artifacts
             path: ${{env.AUTO_PATH_ARTIFACTS}}
   deploy:
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
     name: Deploy Job
     needs: [build]
     if: needs.build.outputs.deploy == 'true'
     steps:
-      - name: Debug
-        run: |
-          echo "VERSION: ${{ needs.build.outputs.version }}"
       - name: Restore Artifacts
         uses: actions/download-artifact@v3
         with:
           name: artifacts
           path: artifacts
-      - name: List workspace
+      - name: Prepare Workspace
         run: |
-          dir
           dir artifacts
+          unzip artifacts/docs.zip
+          dir
       - name: Upload release binaries
         uses: svenstaro/upload-release-action@v2
         with:
@@ -111,4 +109,9 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-      
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: html
+          branch: test-pages
+
