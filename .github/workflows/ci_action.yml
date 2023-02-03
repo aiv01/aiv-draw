@@ -91,11 +91,13 @@ jobs:
     needs: [build]
     if: needs.build.outputs.deploy == 'true'
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Restore Artifacts
         uses: actions/download-artifact@v3
         with:
           name: artifacts
-          path: artifacts
+          path: artifacts        
       - name: Prepare Workspace
         run: |
           dir artifacts
