@@ -109,7 +109,7 @@ jobs:
           ls -l
       - name: Publish Nuget Package
         run: |
-          nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+          nuget push "artifacts/*.nupkg" -Verbosity detailed -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
       - name: Upload Release Artifacts
         uses: svenstaro/upload-release-action@v2
         with:
