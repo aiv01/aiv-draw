@@ -75,7 +75,6 @@ jobs:
             $Env:PATH += ";C:\Program Files\doxygen\bin"
             doxygen
             Compress-Archive -Path ${{env.AUTO_PATH_DOCS}} -DestinationPath docs.zip
-            dir C:\Users\runneradmin\AppData\Local\Temp\chocolatey\doxygen.install\1.9.6\
         - name: Artifacts
           if: steps.init_step.outputs.deploy == 'true'
           run: |
