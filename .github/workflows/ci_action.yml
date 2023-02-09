@@ -29,8 +29,6 @@ jobs:
           # - obtaing version X.Y.Z by removing starting 'v'
           # - enable deploy job
           run: |
-            echo $env:LOCALAPPDATA
-            dir $env:LOCALAPPDATA\Temp
             $ver_selected='0.0.0'
             $do_deploy='false'
             if ( '${{ github.ref_type }}' -eq 'tag' ) { 
