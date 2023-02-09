@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['i',['I',['../namespace_aiv_1_1_draw.html#aaca6f17b0268c4fa64109d6226836027add7536794b63bf90eccfd37f9b147d7f',1,'Aiv::Draw']]],
-  ['implied',['IMPLIED',['../_n_unit_83_812_80_2_l_i_c_e_n_s_e_8txt.html#a52624bbac674cde245ac445a77ab955d',1,'IMPLIED():&#160;LICENSE.txt'],['../_n_unit_8_console_runner_83_811_81_2_l_i_c_e_n_s_e_8txt.html#a52624bbac674cde245ac445a77ab955d',1,'IMPLIED():&#160;LICENSE.txt']]],
-  ['isopened',['IsOpened',['../class_aiv_1_1_draw_1_1_window.html#a3574b76793f3b37a6fe2f992295252da',1,'Aiv::Draw::Window']]]
+  ['h_0',['H',['../namespace_aiv_1_1_draw.html#aaca6f17b0268c4fa64109d6226836027ac1d9f50f86825a1a2302ec2449c17196',1,'Aiv::Draw']]],
+  ['hasfocus_1',['HasFocus',['../class_aiv_1_1_draw_1_1_window.html#ae7a0d16105539c219d87bd6bf0314ba4',1,'Aiv::Draw::Window']]],
+  ['height_2',['Height',['../class_aiv_1_1_draw_1_1_sprite.html#aaf05904ba4ceca9162f02023765d9bd1',1,'Aiv.Draw.Sprite.Height()'],['../class_aiv_1_1_draw_1_1_window.html#ad67ca5c1dc0eb52923499531f08288fe',1,'Aiv.Draw.Window.Height()']]]
 ];
