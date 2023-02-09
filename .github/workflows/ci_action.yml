@@ -1,0 +1,125 @@
+name: CI Action
+on:
+  push:
+      branches: 
+        - '**'
+        - '!master'
+      tags: ['v[0-9].[0-9]+.[0-9]+']
+  pull_request:
+      branches:
+        - '**'
+jobs:
+  build:
+      name: Build Job
+      runs-on: windows-2019
+      env:
+        AUTO_PATH_SLN: AivDraw.sln
+        AUTO_PATH_NUSPEC: AivDraw.nuspec
+        AUTO_PATH_LIBR_DLL: AivDraw\bin\Release\AivDraw.dll
+        AUTO_PATH_TEST_DLL: Tests\bin\Release\Tests.dll
+        AUTO_PATH_DOCS: auto-docs\html
+        AUTO_PATH_ARTIFACTS: artifacts
+      outputs:
+        version: ${{ steps.init_step.outputs.version }} # library version with format X.Y.Z
+        deploy: ${{ steps.init_step.outputs.deploy }}   # enable deploy job. Values: 'true', 'false'
+      steps:
+        - name: Prepare env
+          id: init_step
+          # if action is triggered by a tag/relase with pattern vX.Y.Z
+          # - obtaing version X.Y.Z by removing starting 'v'
+          # - enable deploy job
+          run: |
+            $ver_selected='0.0.0'
+            $do_deploy='false'
+            if ( '${{ github.ref_type }}' -eq 'tag' ) { 
+              $ver_selected='${{ github.ref_name }}'
+              $ver_selected=$ver_selected.Substring(1) 
+              $do_deploy='true'
+            }
+            echo "Selected Version: $ver_selected"
+            echo "Selected Deploy: $do_deploy"
+            echo "version=$ver_selected" >> $env:GITHUB_OUTPUT
+            echo "deploy=$do_deploy" >> $env:GITHUB_OUTPUT
+        - name: Add msbuild to PATH
+          uses: microsoft/setup-msbuild@v1.1
+          with:
+            msbuild-architecture: x64       
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Compile
+          run: |
+            DIR ${{ github.workspace }}
+            nuget restore ${{env.AUTO_PATH_SLN}}
+            msbuild /p:Configuration=Release ${{env.AUTO_PATH_SLN}}
+            DIR ${{env.AUTO_PATH_LIBR_DLL}}
+            DIR
+        - name: Test
+          run: packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ${{env.AUTO_PATH_TEST_DLL}}
+        - name: Package
+          run: |
+            ECHO "Prepare .nuspec"
+            # Set VERSION in .nuspec
+            $version='${{ steps.init_step.outputs.version }}'
+            (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_TAG', $version | Set-Content ${{env.AUTO_PATH_NUSPEC}}
+            # Set YEAR in .nuspec
+            $year=Get-Date -Format "yyyy"
+            (Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw) -replace '@AUTO_YEAR', $year | Set-Content ${{env.AUTO_PATH_NUSPEC}}
+            # Print final .nuspec
+            Get-Content ${{env.AUTO_PATH_NUSPEC}} -raw
+            ECHO "Generate NUGET Package"
+            nuget pack ${{env.AUTO_PATH_NUSPEC}} -Verbosity detailed
+            DIR *.nupkg
+        - name: Documentation
+          run: |
+            choco install doxygen.install
+            $Env:PATH += ";C:\Program Files\doxygen\bin"
+            doxygen
+            Compress-Archive -Path ${{env.AUTO_PATH_DOCS}} -DestinationPath docs.zip
+        - name: Artifacts
+          if: steps.init_step.outputs.deploy == 'true'
+          run: |
+            MD ${{env.AUTO_PATH_ARTIFACTS}}
+            CP *.nupkg  ${{env.AUTO_PATH_ARTIFACTS}}
+            CP docs.zip ${{env.AUTO_PATH_ARTIFACTS}}
+            DIR ${{env.AUTO_PATH_ARTIFACTS}}
+        - name: Archive Artifacts
+          if: steps.init_step.outputs.deploy == 'true'
+          uses: actions/upload-artifact@v3
+          with:
+            name: artifacts
+            path: ${{env.AUTO_PATH_ARTIFACTS}}
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Job
+    needs: [build]
+    if: needs.build.outputs.deploy == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts
+          path: artifacts        
+      - name: Prepare Workspace
+        run: |
+          ls -l artifacts
+          # docs.zip contains 'html' folder
+          unzip artifacts/docs.zip
+          ls -l
+      - name: Publish Nuget Package
+        run: |
+          nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      - name: Upload Release Artifacts
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: artifacts/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+      - name: Upload GH-Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: html     # folder extracted from docs.zip
+

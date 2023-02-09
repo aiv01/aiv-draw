@@ -1,4 +1,4 @@
-# aiv-draw &middot; [![Nuget Version](https://img.shields.io/nuget/v/Aiv.Draw?color=blue)](https://www.nuget.org/packages/Aiv.Draw) [![Nuget Downloads](https://img.shields.io/nuget/dt/Aiv.Draw?color=yellow)](https://www.nuget.org/packages/Aiv.Draw) [![Api Doc](https://img.shields.io/badge/api--doc-read-blue)](http://aiv01.github.io/aiv-draw/) [![Build Status](https://travis-ci.org/aiv01/aiv-draw.svg?branch=master)](https://travis-ci.org/aiv01/aiv-draw) 
+# aiv-draw &middot; [![Nuget Version](https://img.shields.io/nuget/v/Aiv.Draw?color=blue)](https://www.nuget.org/packages/Aiv.Draw) [![Nuget Downloads](https://img.shields.io/nuget/dt/Aiv.Draw?color=yellow)](https://www.nuget.org/packages/Aiv.Draw) [![Api Doc](https://img.shields.io/badge/api--doc-read-blue)](http://aiv01.github.io/aiv-draw/) [![Build status](https://img.shields.io/github/actions/workflow/status/aiv01/aiv-draw/ci_action.yml?branch=master)](https://github.com/aiv01/aiv-draw/actions/workflows/ci_action.yml)
 
 
 Simple wrapper for teaching computer graphics principles to AIV first year students.
